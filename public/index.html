@@ -324,6 +324,61 @@ footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .acct{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;font-size:15px;color:var(--mute);margin-bottom:6px}
 .acct .btn{min-height:38px;font-size:14px;padding:0 14px}
 @media(max-width:760px){.auth{grid-template-columns:minmax(0,1fr)}}
+.gzoom{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:4px;margin:0 0 12px}
+.gzoom button{min-height:36px;padding:0 14px;border:0;border-radius:18px;background:transparent;color:var(--ink);font:500 14px Barlow,sans-serif;cursor:pointer}
+.gzoom button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.gpast{position:absolute;top:50%;left:6px;transform:translateY(-50%);font-size:12px;color:var(--mute)}
+/* experience timeline */
+.xstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 22px}
+.xs{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.xs::after{content:"";position:absolute;left:0;bottom:0;height:4px;width:0;background:var(--y);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.xstats.go .xs::after{width:100%}
+.xs b{display:block;font:700 clamp(30px,4vw,42px)/1 "Barlow Condensed",sans-serif}
+.xs span{color:var(--mute);font-size:14px}
+.gantt{--lab:34%;position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 0;overflow:hidden}
+.grow{display:grid;grid-template-columns:var(--lab) minmax(0,1fr);align-items:center;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;padding:0;cursor:pointer;min-height:48px;border-top:1px solid var(--line);transition:background .2s}
+.grow:first-of-type{border-top:0}
+.grow[data-i]:hover{background:var(--bg)}
+.grow[aria-pressed=true]{background:color-mix(in srgb,var(--y) 14%,transparent)}
+.grow[aria-pressed=true] .glab b{color:var(--ink)}
+.grow:focus-visible{outline:3px solid var(--y);outline-offset:-3px}
+.glab{padding:6px 14px;min-width:0}
+.glab b{display:block;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mute)}
+.glab small{display:block;color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ghead{cursor:default;min-height:30px;font-size:13px;color:var(--mute)}
+.gtrack{position:relative;height:100%;min-height:30px;margin-right:16px}
+.gtrack em{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.gaxis i{position:absolute;top:50%;transform:translate(-50%,-50%);font-style:normal;font-size:13px;color:var(--mute)}
+.gbar{position:absolute;top:50%;height:18px;margin-top:-9px;left:0;width:0;border-radius:9px;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 75%,#fff),var(--c));box-shadow:0 2px 8px color-mix(in srgb,var(--c) 45%,transparent);overflow:hidden;min-width:8px}
+.gantt.go .gbar{width:var(--w);transition:width 1.1s cubic-bezier(.2,.8,.2,1) calc(var(--d)*90ms + .1s)}
+.gbar.live::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,#ffffffa0 50%,transparent 70%);transform:translateX(-100%);animation:gshine 2.4s ease-in-out infinite}
+@keyframes gshine{to{transform:translateX(100%)}}
+.grow[aria-pressed=true] .gbar{height:24px;margin-top:-12px}
+.gnow{position:absolute;top:40px;bottom:8px;width:2px;margin-left:-1px;background:#e8251a;pointer-events:none}
+.gnow span{position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:#e8251a;color:#fff;font:600 12px Barlow,sans-serif;padding:1px 7px;border-radius:9px;white-space:nowrap}
+.gnow::after{content:"";position:absolute;left:-5px;top:-4px;width:12px;height:12px;border-radius:50%;background:#e8251a;animation:gpulse 1.6s ease-out infinite}
+@keyframes gpulse{0%{box-shadow:0 0 0 0 #e8251a88}100%{box-shadow:0 0 0 12px #e8251a00}}
+.xdetail{margin-top:18px}
+.xcard{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:14px;padding:20px 22px;animation:xin .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes xin{from{opacity:0;transform:translateY(14px)}}
+.xtop{display:flex;gap:16px;align-items:flex-start}
+.xmono{flex:none;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;background:var(--c);color:#111;font:700 24px "Barlow Condensed",sans-serif;animation:xpop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes xpop{from{transform:scale(.4) rotate(-20deg);opacity:0}}
+.xkind{font-size:13px;font-weight:600;color:var(--mute);margin-right:8px}
+.xcard h3{font-size:28px;margin:4px 0 2px}
+.xco{margin:0;color:var(--mute)}
+.xmeta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 8px;font-size:15px}
+.xmeta span:last-child{color:var(--mute)}
+.xprog{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.xprog i{display:block;height:100%;background:var(--c);border-radius:3px;animation:xgrow .9s cubic-bezier(.2,.8,.2,1)}
+@keyframes xgrow{from{width:0}}
+.xcard ul{margin:0;padding-left:20px}
+.xcard li{margin-bottom:6px;animation:xin .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--k)*70ms + .1s)}
+.xnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;border-top:1px solid var(--line);padding-top:14px;color:var(--mute);font-size:14px}
+.xnav .btn{min-height:40px;font-size:15px}
+.xnav .btn[disabled]{opacity:.35;cursor:default;transform:none}
+@media(max-width:760px){.xstats{grid-template-columns:repeat(2,minmax(0,1fr))}.gantt{--lab:42%}.glab{padding:6px 10px}.glab b{font-size:14px}.gaxis i:nth-child(even){display:none}.xcard h3{font-size:23px}}
+@media(prefers-reduced-motion:reduce){.gantt .gbar{width:var(--w)!important;transition:none!important}.gbar.live::after,.gnow::after,.xcard,.xcard li,.xmono,.xprog i{animation:none!important}}
 /* ---- motion layer ---- */
 #prog{position:absolute;left:0;bottom:-1px;height:3px;width:100%;background:var(--y);transform-origin:0 50%;transform:scaleX(0)}
 .hero{position:relative;overflow:hidden}
@@ -612,7 +667,9 @@ h2.rv.in{clip-path:inset(-10% -2% -10% 0)}
     <button type="button" data-t="tech" aria-pressed="false">IT &amp; engineering</button>
     <button type="button" data-t="early" aria-pressed="false">Early career</button>
   </div>
-  <ol class="tl" id="tl"></ol>
+  <div class="xstats" id="xstats"></div>
+  <div class="gantt" id="gantt" aria-label="Career timeline"></div>
+  <div class="xdetail" id="xdetail" aria-live="polite"></div>
 </div></section>
 
 <section class="band skills" id="skills"><div class="wrap">
@@ -661,21 +718,58 @@ const tick='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#ffc70
 document.getElementById('wins').innerHTML=wins.map(w=>`<li>${tick}${w}</li>`).join('');
 
 const jobs=[
- {t:"Lubrication Supervisor",c:"JW Engineering Pty Ltd · Internal contractor, Visy Smithfield",w:"Sep 2026 – Present",k:"rel",now:1,d:["Lead lubrication management and maintenance coordination at Visy 3 & 6, Smithfield.","Improve equipment reliability through effective lubrication practice and maintenance execution.","Supervise lubrication technicians, mechanical trades and subcontractors."]},
- {t:"ICML Exam Development Committee",c:"International Council for Machinery Lubrication",w:"Aug 2026 – Present",k:"rel",now:1,d:["Develop and review ICML certification examination questions.","Check items for technical accuracy, clarity, fairness and alignment with the MLE knowledge level.","Evaluate questions and the exam's Domain of Knowledge (DOK).","Help keep ICML exams consistent and of high quality."]},
- {t:"Condition Monitoring Technician",c:"SRG Global · Portland, VIC (aluminium smelting)",w:"Jul 2026 – Aug 2026",k:"rel",d:["Condition monitoring on rotating plant in an aluminium smelting environment."]},
- {t:"Mechanical Engineer – Supervisor",c:"VAP Australia Pty Ltd · Visy internal contractor, Sydney",w:"May 2024 – Apr 2026",k:"rel",d:["Supported reliability, lubrication and condition monitoring at Visy Smithfield's paper and recycling facilities.","Collected vibration data and ran preliminary analysis with the Emerson CSI 2140 on pumps, motors, fans, conveyors, gearboxes, rolls and paper machine assets.","Ran route-based monitoring: FFT spectra, waveforms, trending and machine health assessments.","Identified imbalance, misalignment, looseness, resonance, bearing defects, soft foot and lubrication faults before critical failure.","Managed grease and oil application, lube routes, contamination control and oil inspections.","Installed, commissioned and optimised ATS autolube systems.","Supported shutdowns and reported equipment condition to planners and engineers."]},
- {t:"Graduate Mechanical Engineer",c:"VAP Australia Pty Ltd · Sydney",w:"Jul 2023 – May 2024",k:"rel",d:["Coordinated site maintenance, shutdowns and reliability improvement projects.","Supervised lubrication technicians, mechanical trades, subcontractors and intern engineers.","Planned work, prepared job scopes and coordinated resources to meet shutdown schedules.","Ran vibration analysis with Emerson CSI 2140 and SKF Microlog, including PeakVue and trending.","Installed and commissioned 200+ single-point automatic lubricators; supported lube planning for about 350 motors.","Raised purchase requests in IFS and coordinated suppliers and contractors.","Contributed to IoT-based digital lube routes and predictive maintenance workflows.","Used PTC Creo, Fusion 360 and 3D printing for design and prototyping."]},
- {t:"IT & Reverse Engineering Specialist",c:"SKH Technologies (self-employed) · Karaikkudi, India",w:"Feb 2019 – Nov 2024",k:"tech",d:["Founded and ran SKH Technologies as Managing Director.","Reverse-engineered systems to improve performance, security and functionality.","Built front-end interfaces with HTML, CSS and JavaScript, plus back-end database and server integration.","Worked directly with clients to scope their technology needs."]},
- {t:"Automotive Technician (Trainee)",c:"Moogambigai Automobiles · Coimbatore",w:"Dec 2019 – Mar 2020",k:"early",d:["Diagnosed and repaired two-wheeler engines, mechanical and electrical systems.","Carried out routine maintenance, estimates and service logs."]},
- {t:"CNC Machinist (Trainee)",c:"Tritech Precision Ltd · Coimbatore",w:"Jun 2019 – Jul 2019",k:"early",d:["Trained on CNC, vertical machining centres (VMC) and lathes."]},
- {t:"System Admin & Teaching Fellow",c:"AVVN Computer Centre · Kandanur",w:"Apr 2012 – Sep 2018",k:"tech",d:["Installed and configured systems, servers and operating systems.","Solved hardware, software and connectivity problems, and taught students."]},
- {t:"Automotive Technician (Trainee)",c:"Aiyappa Auto Works · Kandanur",w:"Apr 2018 – Jul 2018",k:"early",d:["Engine assembly, diagnosis and routine two-wheeler maintenance."]}
+ {s:'2026-09',e:null,t:"Lubrication Supervisor",c:"JW Engineering Pty Ltd · Internal contractor, Visy Smithfield",w:"Sep 2026 – Present",k:"rel",now:1,d:["Lead lubrication management and maintenance coordination at Visy 3 & 6, Smithfield.","Improve equipment reliability through effective lubrication practice and maintenance execution.","Supervise lubrication technicians, mechanical trades and subcontractors."]},
+ {s:'2026-08',e:null,t:"ICML Exam Development Committee",c:"International Council for Machinery Lubrication",w:"Aug 2026 – Present",k:"rel",now:1,d:["Develop and review ICML certification examination questions.","Check items for technical accuracy, clarity, fairness and alignment with the MLE knowledge level.","Evaluate questions and the exam's Domain of Knowledge (DOK).","Help keep ICML exams consistent and of high quality."]},
+ {s:'2026-07',e:'2026-08',t:"Condition Monitoring Technician",c:"SRG Global · Portland, VIC (aluminium smelting)",w:"Jul 2026 – Aug 2026",k:"rel",d:["Condition monitoring on rotating plant in an aluminium smelting environment."]},
+ {s:'2024-05',e:'2026-04',t:"Mechanical Engineer – Supervisor",c:"VAP Australia Pty Ltd · Visy internal contractor, Sydney",w:"May 2024 – Apr 2026",k:"rel",d:["Supported reliability, lubrication and condition monitoring at Visy Smithfield's paper and recycling facilities.","Collected vibration data and ran preliminary analysis with the Emerson CSI 2140 on pumps, motors, fans, conveyors, gearboxes, rolls and paper machine assets.","Ran route-based monitoring: FFT spectra, waveforms, trending and machine health assessments.","Identified imbalance, misalignment, looseness, resonance, bearing defects, soft foot and lubrication faults before critical failure.","Managed grease and oil application, lube routes, contamination control and oil inspections.","Installed, commissioned and optimised ATS autolube systems.","Supported shutdowns and reported equipment condition to planners and engineers."]},
+ {s:'2023-07',e:'2024-05',t:"Graduate Mechanical Engineer",c:"VAP Australia Pty Ltd · Sydney",w:"Jul 2023 – May 2024",k:"rel",d:["Coordinated site maintenance, shutdowns and reliability improvement projects.","Supervised lubrication technicians, mechanical trades, subcontractors and intern engineers.","Planned work, prepared job scopes and coordinated resources to meet shutdown schedules.","Ran vibration analysis with Emerson CSI 2140 and SKF Microlog, including PeakVue and trending.","Installed and commissioned 200+ single-point automatic lubricators; supported lube planning for about 350 motors.","Raised purchase requests in IFS and coordinated suppliers and contractors.","Contributed to IoT-based digital lube routes and predictive maintenance workflows.","Used PTC Creo, Fusion 360 and 3D printing for design and prototyping."]},
+ {s:'2019-02',e:'2024-11',t:"IT & Reverse Engineering Specialist",c:"SKH Technologies (self-employed) · Karaikkudi, India",w:"Feb 2019 – Nov 2024",k:"tech",d:["Founded and ran SKH Technologies as Managing Director.","Reverse-engineered systems to improve performance, security and functionality.","Built front-end interfaces with HTML, CSS and JavaScript, plus back-end database and server integration.","Worked directly with clients to scope their technology needs."]},
+ {s:'2019-12',e:'2020-03',t:"Automotive Technician (Trainee)",c:"Moogambigai Automobiles · Coimbatore",w:"Dec 2019 – Mar 2020",k:"early",d:["Diagnosed and repaired two-wheeler engines, mechanical and electrical systems.","Carried out routine maintenance, estimates and service logs."]},
+ {s:'2019-06',e:'2019-07',t:"CNC Machinist (Trainee)",c:"Tritech Precision Ltd · Coimbatore",w:"Jun 2019 – Jul 2019",k:"early",d:["Trained on CNC, vertical machining centres (VMC) and lathes."]},
+ {s:'2012-04',e:'2018-09',t:"System Admin & Teaching Fellow",c:"AVVN Computer Centre · Kandanur",w:"Apr 2012 – Sep 2018",k:"tech",d:["Installed and configured systems, servers and operating systems.","Solved hardware, software and connectivity problems, and taught students."]},
+ {s:'2018-04',e:'2018-07',t:"Automotive Technician (Trainee)",c:"Aiyappa Auto Works · Kandanur",w:"Apr 2018 – Jul 2018",k:"early",d:["Engine assembly, diagnosis and routine two-wheeler maintenance."]}
 ];
-const tl=document.getElementById('tl');
-tl.innerHTML=jobs.map((j,i)=>`<li class="job${j.now?' now':''}" data-k="${j.k}"><details${i<2?' open':''}><summary><h3>${j.t}${j.now?'<span class="badge">Current</span>':''}</h3><span class="when">${j.w}</span><span class="co">${j.c}</span><span class="more">Show details</span></summary><ul>${j.d.map(x=>`<li>${x}</li>`).join('')}</ul></details></li>`).join('');
-const tabs=document.querySelectorAll('.tabs button');
-tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>x.setAttribute('aria-pressed',x===b));const t=b.dataset.t;tl.querySelectorAll('.job').forEach(li=>li.hidden=!(t==='all'||li.dataset.k===t))}));
+/* experience: career timeline */
+{
+const G=document.getElementById('gantt'),X=document.getElementById('xdetail'),XS=document.getElementById('xstats');
+const ym=t=>{const [y,m]=t.split('-').map(Number);return y*12+m-1},NOW=ym('2026-11'),T0=ym('2012-01'),T1=ym('2027-03'),pct=m=>((m-T0)/(T1-T0)*100);
+const KC={rel:'#ffc700',tech:'#5aa2ff',early:'#9aa6ad'},KN={rel:'Reliability & lubrication',tech:'IT & engineering',early:'Early career'};
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],fmt=m=>MON[m%12]+' '+Math.floor(m/12);
+const dur=(a,b)=>{const n=b-a+1,y=Math.floor(n/12),mo=n%12;return [y?y+' year'+(y>1?'s':''):'',mo?mo+' month'+(mo>1?'s':''):''].filter(Boolean).join(' ')};
+const J=jobs.map((j,i)=>({...j,i,a:ym(j.s),b:j.e?ym(j.e):NOW,co:j.c.split(' · ')[0],loc:j.c.split(' · ')[1]||''}));
+const relM=ym('2023-07');
+XS.innerHTML=[[J.length,'','roles'],[Math.floor((NOW-relM+1)/12),'+ yrs','in reliability & lubrication'],[2012,'','first role'],[J.filter(j=>!j.e).length,'','current roles']].map(([n,suf,l])=>`<div class="xs"><b data-n="${n}" data-s="${suf}">${n}${suf}</b><span>${l}</span></div>`).join('');
+let R=[T0,T1];
+const zoomEl=document.createElement('div');zoomEl.className='gzoom';zoomEl.setAttribute('role','group');zoomEl.setAttribute('aria-label','Timeline range');
+zoomEl.innerHTML='<button type="button" data-z="full">Full career</button><button type="button" data-z="recent">Since 2022</button>';G.before(zoomEl);
+const P=m=>((m-R[0])/(R[1]-R[0])*100);
+function render(){const span=(R[1]-R[0])/12,step=span>8?2:1,years=[];for(let y=Math.ceil(R[0]/12);y*12<R[1]-8;y+=step)years.push(y);
+ const keep=G.querySelector('.grow[aria-pressed=true]')?.dataset.i,hid=new Set([...G.querySelectorAll('.grow[data-i][hidden]')].map(r=>r.dataset.i));
+ G.innerHTML=`<div class="grow ghead"><span class="glab">Role</span><span class="gtrack gaxis">${years.map(y=>`<i style="left:${P(y*12)}%">${y}</i>`).join('')}</span></div>`+
+ J.map(j=>{const a=Math.max(j.a,R[0]),bb=Math.min(j.b+1,R[1]),out=bb<=a;return `<button type="button" class="grow" data-i="${j.i}" data-k="${j.k}" aria-pressed="${String(+keep===j.i)}" ${hid.has(String(j.i))?'hidden':''}><span class="glab"><b>${j.t}</b><small>${j.co}</small></span><span class="gtrack">${years.map(y=>`<em style="left:${P(y*12)}%"></em>`).join('')}${out?`<span class="gpast">${j.b<R[0]?'Before '+Math.floor(R[0]/12):''}</span>`:`<span class="gbar${j.e?'':' live'}" style="left:${P(a)}%;--w:${Math.max(.8,P(bb)-P(a))}%;--c:${KC[j.k]};--d:${j.i}"></span>`}</span></button>`}).join('')+
+ `<div class="gnow" style="left:calc(var(--lab) + (100% - var(--lab) - 16px) * ${(P(NOW)/100).toFixed(4)})"><span>Now</span></div>`;
+ zoomEl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.z==='full')===(R[0]===T0))));
+ if(G.classList.contains('go')){G.classList.remove('go');void G.offsetWidth;requestAnimationFrame(()=>G.classList.add('go'))}}
+zoomEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;R=b.dataset.z==='full'?[T0,T1]:[ym('2022-01'),T1];render()});
+if(matchMedia('(max-width:600px)').matches)R=[ym('2022-01'),T1];
+render();
+let cur=0;const vis=()=>[...G.querySelectorAll('.grow[data-i]')].filter(r=>!r.hidden).map(r=>+r.dataset.i);
+function show(i){cur=i;const j=J[i];G.querySelectorAll('.grow[data-i]').forEach(r=>r.setAttribute('aria-pressed',+r.dataset.i===i));
+ const list=vis(),pos=list.indexOf(i);
+ X.innerHTML=`<div class="xcard" style="--c:${KC[j.k]}"><div class="xtop"><span class="xmono">${j.co.split(/\s+/).filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join('')||j.co[0]}</span><div><span class="xkind">${KN[j.k]}</span>${j.e?'':'<span class="badge">Current</span>'}<h3>${j.t}</h3><p class="xco">${j.co}${j.loc?' · '+j.loc:''}</p></div></div>
+ <div class="xmeta"><span><b>${fmt(j.a)} – ${j.e?fmt(j.b):'Present'}</b></span><span>${dur(j.a,j.b)}</span></div>
+ <div class="xprog"><i style="width:${Math.min(100,(j.b-j.a+1)/((NOW-T0)+1)*100*3)}%"></i></div>
+ <ul>${j.d.map((x,k)=>`<li style="--k:${k}">${x}</li>`).join('')}</ul>
+ <div class="xnav"><button type="button" class="btn" data-m="-1" ${pos<=0?'disabled':''}>← Previous</button><span>${pos+1} of ${list.length}</span><button type="button" class="btn" data-m="1" ${pos>=list.length-1?'disabled':''}>Next →</button></div></div>`;
+ X.querySelectorAll('.xnav button').forEach(b=>b.addEventListener('click',()=>{const l=vis(),p=l.indexOf(cur)+ +b.dataset.m;if(l[p]!=null)show(l[p])}))}
+G.addEventListener('click',e=>{const r=e.target.closest('.grow[data-i]');if(r)show(+r.dataset.i)});
+const tabs=document.querySelectorAll('#experience .tabs button');
+tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>x.setAttribute('aria-pressed',x===b));const t=b.dataset.t;G.querySelectorAll('.grow[data-i]').forEach(r=>r.hidden=!(t==='all'||r.dataset.k===t));const l=vis();if(!l.includes(cur)&&l.length)show(l[0]);else show(cur)}));
+show(0);
+const io=new IntersectionObserver(es=>{if(es[0].isIntersecting){G.classList.add('go');XS.classList.add('go');
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)XS.querySelectorAll('b').forEach(el=>{const n=+el.dataset.n,s=el.dataset.s,from=n>1000?n-14:0;let t0=null;const st=ts=>{t0??=ts;const p=Math.min(1,(ts-t0)/1400),e=1-(1-p)**3;el.textContent=Math.round(from+(n-from)*e)+s;if(p<1)requestAnimationFrame(st)};requestAnimationFrame(st)});
+  io.disconnect()}},{threshold:.2});io.observe(G);
+}
 
 const sk=[["Condition monitoring",["Vibration analysis, ISO 18436-2 CAT II","Emerson CSI 2140","AMS Machinery Manager","SKF Microlog","PeakVue & G-value","FFT spectrum & waveform","Predictive maintenance","RCFA"]],["Lubrication",["Machinery lubrication","Oil condition monitoring","Oil sampling","Contamination control","Lube route optimisation","ATS autolube systems","Single-point lubricators","Hydraulic troubleshooting"]],["Maintenance & planning",["Rotating equipment reliability","Shutdown planning","Job scoping","Machinery installation & alignment","Team supervision","CMMS: SAP, IFS, ECAM"]],["Design & digital",["Fusion 360","PTC Creo","3D printing","IoT digital lube routes","HTML, CSS & JavaScript","Reverse engineering"]]];
 document.getElementById('sk').innerHTML=sk.map(([h,c])=>`<div><h3>${h}</h3><div class="chips">${c.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`).join('');
@@ -994,11 +1088,11 @@ const h1=document.querySelector('.hero h1');
 if(!reduce){let d=0;h1.setAttribute('aria-label',h1.textContent);h1.innerHTML=h1.textContent.split(' ').map(w=>`<span class="w" aria-hidden="true">${[...w].map(c=>`<span class="ch" style="--d:${d++}">${c}</span>`).join('')}</span>`).join(' ');document.querySelector('.hero').classList.add('anim');h1.querySelectorAll('.ch').forEach(c=>c.addEventListener('animationend',()=>c.classList.add('done'),{once:true}))}
 
 // scroll progress + timeline fill
-const prog=document.getElementById('prog'),tlEl=document.getElementById('tl'),jobsEls=[...tlEl.querySelectorAll('.job')];
+const prog=document.getElementById('prog'),tlEl=document.getElementById('tl'),jobsEls=tlEl?[...tlEl.querySelectorAll('.job')]:[];
 let tq=false;
 const onScroll=()=>{tq=false;const h=document.documentElement,max=h.scrollHeight-innerHeight;prog.style.transform=`scaleX(${max>0?scrollY/max:0})`;
-  const r=tlEl.getBoundingClientRect(),mid=innerHeight*.6,p=Math.max(0,Math.min(1,(mid-r.top)/r.height));tlEl.style.setProperty('--p',(p*100).toFixed(1)+'%');
-  jobsEls.forEach(j=>j.classList.toggle('lit',j.getBoundingClientRect().top+22<mid))};
+  if(tlEl){const r=tlEl.getBoundingClientRect(),mid=innerHeight*.6,p=Math.max(0,Math.min(1,(mid-r.top)/r.height));tlEl.style.setProperty('--p',(p*100).toFixed(1)+'%');
+  jobsEls.forEach(j=>j.classList.toggle('lit',j.getBoundingClientRect().top+22<mid))}};
 addEventListener('scroll',()=>{if(!tq){tq=true;requestAnimationFrame(onScroll)}},{passive:true});addEventListener('resize',onScroll);onScroll();
 
 if(!reduce){
