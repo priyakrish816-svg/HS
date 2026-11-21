@@ -296,6 +296,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .chk label{display:inline-flex;align-items:center;gap:6px;min-height:32px;font-weight:500}
 .chk input{width:18px;height:18px}
 @media(max-width:860px){.cgrid,.calc{grid-template-columns:minmax(0,1fr)}.ccard{grid-template-columns:92px minmax(0,1fr)}.cicon{width:92px;height:92px}.cicon svg{width:68px;height:68px}}
+.gchips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.gchips a{min-height:38px;display:inline-flex;align-items:center;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-size:15px;font-weight:500}
+.gchips a:hover{border-color:var(--y)}
+.cgroup{margin-top:26px;scroll-margin-top:80px}
+.cgroup h3{font-size:24px;display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--line);padding-bottom:6px}
+.cgroup h3 span,.ccount{font:600 14px Barlow,sans-serif;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:1px 9px;color:var(--mute)}
+.cgroup>p{color:var(--mute);margin:6px 0 14px}
 /* auth */
 .auth{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start;max-width:980px}
 .authbox,.authinfo{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
@@ -306,6 +313,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .authbox .btn{width:100%;justify-content:center;min-height:48px}
 .aerr{color:#e8251a;font-weight:600;min-height:1.4em;margin:4px 0 10px}
 .authinfo ul{margin:6px 0 14px;padding-left:20px;color:var(--mute)}
+.asub{font-weight:600;font-size:14px;color:var(--ink);margin:8px 0 0}
+.authinfo ul{margin-top:2px}
 .ahd{display:flex;align-items:center;gap:8px;font-weight:600;margin:10px 0 0}
 .auth.one{grid-template-columns:minmax(0,1fr);max-width:480px}
 .afl{margin:12px 0 0;text-align:center}.afl a{color:var(--link);font-weight:600}
@@ -1106,7 +1115,7 @@ const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 async function check(){try{const r=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});const ct=r.headers.get('content-type')||'';if(ct.includes('application/json')){const j=await r.json();st.mode='server';st.user=j.user||null;st.signup=j.signup||'open';return}}catch(e){}st.mode='preview'}
 let loading=null;
 function loadModule(){if(window.HSCalc)return Promise.resolve();if(loading)return loading;loading=new Promise((res,rej)=>{const s=document.createElement('script');s.src=st.mode==='server'?'/app/calculators.js':'calculators.js';s.onload=res;s.onerror=()=>{loading=null;rej()};document.body.appendChild(s)});return loading}
-const NAMES={v:['Bearing defect frequencies','Fmax, lines and resolution','Fmax from shaft speed','Vibration units conversion','ISO 10816-3 severity','Forcing frequencies','Paper machine roll speeds','Gear train frequencies','Balance tolerance (ISO 21940-11)','Fault diagnosis guide'],l:['Bearing grease quantity','Relubrication interval','Oil viscosity and kappa','ISO 4406 cleanliness code','Filter beta ratio','Auto-lubricator setting','Lubrication unit conversions','Viscosity blending','Oil life versus temperature','Kidney-loop filtration time','Tank and sump oil volume','Water in oil','Desiccant breather sizing','Gear oil grade selection','Oil analysis alarm limits']};
+const NAMES={v:[['Diagnosis',['Fault diagnosis guide']],['Fault frequencies',['Bearing defect frequencies','Gear train frequencies','Forcing frequencies','Paper machine roll speeds']],['Analyser set-up',['Fmax, lines and resolution','Fmax from shaft speed','Vibration units conversion']],['Severity and balancing',['ISO 10816-3 severity','Balance tolerance (ISO 21940-11)']]],l:[['Greasing',['Bearing grease quantity','Relubrication interval','Auto-lubricator setting']],['Oil selection and viscosity',['Oil viscosity and kappa','Viscosity blending','Gear oil grade selection','Oil life versus temperature']],['Oil analysis',['ISO 4406 cleanliness code','Water in oil','Oil analysis alarm limits']],['Filtration and breathers',['Filter beta ratio','Kidney-loop filtration time','Desiccant breather sizing']],['Tanks and conversions',['Tank and sump oil volume','Lubrication unit conversions']]]};
 function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
   view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>Calculators</h1><p>Sign in to use 25 engineering calculators for vibration analysis and machinery lubrication. Results update as you type, and every calculator shows its formula.</p></div></div>
   <div class="band"><div class="wrap auth">
@@ -1123,7 +1132,7 @@ function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
      ${!canSign&&tab==='login'?'<p class="cnote">This area is private. New accounts can\'t be created.</p>':''}
     </form>
    </div>
-   <div class="authinfo"><h3>What's inside</h3>${['v','l'].map(k=>`<p class="ahd"><i class="kd ${k}"></i>${k==='v'?'Vibration':'Lubrication'}</p><ul>${NAMES[k].map(n=>`<li>${n}</li>`).join('')}</ul>`).join('')}</div>
+   <div class="authinfo"><h3>What's inside</h3>${['v','l'].map(k=>`<p class="ahd"><i class="kd ${k}"></i>${k==='v'?'Vibration':'Lubrication'}</p>${NAMES[k].map(([g,ns])=>`<p class="asub">${g}</p><ul>${ns.map(n=>`<li>${n}</li>`).join('')}</ul>`).join('')}`).join('')}</div>
   </div></div>`;
   view.querySelectorAll('.atabs button').forEach(b=>b.addEventListener('click',()=>gate(h,b.dataset.t)));
   const fg=document.getElementById('aforgot');if(fg)fg.addEventListener('click',e=>{e.preventDefault();forgot(h)});
