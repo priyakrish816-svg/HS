@@ -6,7 +6,14 @@
  *   PORT            port to listen on (default 3000)
  *   DATA_DIR        where users.json is stored; mount a persistent volume here (default /data)
  *   SESSION_SECRET  long random string used to sign login cookies (REQUIRED in production)
- *   SIGNUP          open | code | closed   (default open)
+ *   SIGNUP          open | code | closed   (default closed: admin only)
+ *   ADMIN_EMAIL     admin account created on first start (default ozharising@gmail.com)
+ *   PUBLIC_URL      site address used in reset emails (default https://<host of the request>)
+ *   SMTP_HOST       mail server for password-reset emails (default smtp.gmail.com)
+ *   SMTP_PORT       465 (TLS) by default
+ *   SMTP_USER       mail account, e.g. ozharising@gmail.com
+ *   SMTP_PASS       mail password; for Gmail use an App Password
+ *   MAIL_FROM       sender address (default SMTP_USER)
  *   SIGNUP_CODE     access code needed to create an account when SIGNUP=code
  *   COOKIE_SECURE   set to "false" only for local testing over plain http (default true)
  *   SESSION_DAYS    how long a login lasts (default 30)
@@ -15,6 +22,8 @@
  *   node server.js users                 list accounts
  *   node server.js delete <email>        delete an account
  *   node server.js reset <email> <pass>  set a new password
+ *   node server.js add <email> [name]    add a member (prints a link to set their password)
+ *   node server.js reset-link <email>    print a password-reset link (works without email set up)
  */
 'use strict';
 const http = require('http');
@@ -27,7 +36,11 @@ const DATA_DIR = process.env.DATA_DIR || '/data';
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const PRIVATE_DIR = path.join(__dirname, 'private');
-const SIGNUP = (process.env.SIGNUP || 'open').toLowerCase();
+const SIGNUP = (process.env.SIGNUP || 'closed').toLowerCase();
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'ozharising@gmail.com').trim().toLowerCase();
+const PUBLIC_URL = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+const SMTP = { host: process.env.SMTP_HOST || 'smtp.gmail.com', port: parseInt(process.env.SMTP_PORT || '465', 10), user: process.env.SMTP_USER || '', pass: process.env.SMTP_PASS || '', from: process.env.MAIL_FROM || process.env.SMTP_USER || '', secure: process.env.SMTP_SECURE !== 'false' };
+const RESET_MINUTES = 60;
 const SIGNUP_CODE = process.env.SIGNUP_CODE || '';
 const COOKIE_SECURE = process.env.COOKIE_SECURE !== 'false';
 const SESSION_DAYS = parseFloat(process.env.SESSION_DAYS || '30');
@@ -58,9 +71,67 @@ function hashPassword(password, salt) {
   });
 }
 async function verifyPassword(password, user) {
+  if (!user.hash) { await hashPassword(password, 'dummy-salt-equalise-timing'); return false; }
   const h = Buffer.from(await hashPassword(password, user.salt), 'hex');
   const stored = Buffer.from(user.hash, 'hex');
   return h.length === stored.length && crypto.timingSafeEqual(h, stored);
+}
+
+
+/* ---------- password reset tokens ---------- */
+const sha256 = t => crypto.createHash('sha256').update(t).digest('hex');
+function issueResetToken(db, user) {
+  const token = crypto.randomBytes(32).toString('base64url');
+  user.resetHash = sha256(token);
+  user.resetExp = Date.now() + RESET_MINUTES * 60e3;
+  saveUsers(db);
+  return token;
+}
+const resetLink = (base, token) => `${base}/#reset-${token}`;
+
+/* ---------- minimal SMTP client (TLS on 465, or plain for local tests) ---------- */
+function sendMail({ to, subject, text }) {
+  return new Promise((resolve, reject) => {
+    if (!SMTP.user || !SMTP.pass) return reject(new Error('SMTP not configured'));
+    const net = require('net'), tls = require('tls');
+    const sock = SMTP.secure ? tls.connect(SMTP.port, SMTP.host, { servername: SMTP.host }) : net.connect(SMTP.port, SMTP.host);
+    sock.setTimeout(20000, () => { sock.destroy(); reject(new Error('SMTP timeout')); });
+    sock.setEncoding('utf8');
+    const b64 = x => Buffer.from(x).toString('base64');
+    const msg = [
+      `From: Hariharan Singaram <${SMTP.from}>`, `To: <${to}>`, `Subject: ${subject}`,
+      `Date: ${new Date().toUTCString()}`, `Message-ID: <${crypto.randomUUID()}@${(SMTP.from.split('@')[1] || 'localhost')}>`,
+      'MIME-Version: 1.0', 'Content-Type: text/plain; charset=utf-8', 'Content-Transfer-Encoding: 8bit', '',
+      text.replace(/\r?\n/g, '\r\n').replace(/^\./gm, '..')].join('\r\n');
+    const steps = [
+      ['', 220], [`EHLO harising.cloud`, 250], ['AUTH LOGIN', 334], [b64(SMTP.user), 334], [b64(SMTP.pass), 235],
+      [`MAIL FROM:<${SMTP.from}>`, 250], [`RCPT TO:<${to}>`, 250], ['DATA', 354], [msg + '\r\n.', 250], ['QUIT', 221]];
+    let i = 0, buf = '';
+    const next = () => { const [cmd] = steps[i]; if (cmd) sock.write(cmd + '\r\n'); };
+    sock.on('data', d => {
+      buf += d;
+      const lines = buf.split('\r\n'); if (lines[lines.length - 1] !== '') return; // wait for full reply
+      const last = lines.filter(Boolean).pop() || '';
+      if (/^\d{3}-/.test(last)) return; // multi-line reply continues
+      buf = '';
+      const code = parseInt(last.slice(0, 3), 10);
+      if (code !== steps[i][1]) { sock.destroy(); return reject(new Error(`SMTP step ${i} failed: ${last}`)); }
+      i++;
+      if (i >= steps.length) { sock.end(); return resolve(); }
+      next();
+    });
+    sock.on('error', reject);
+  });
+}
+
+/* ---------- admin account ---------- */
+function ensureAdmin() {
+  if (!ADMIN_EMAIL) return;
+  const db = loadUsers();
+  if (db.users.some(u => u.email === ADMIN_EMAIL)) return;
+  db.users.push({ id: crypto.randomUUID(), name: 'Hariharan Singaram', email: ADMIN_EMAIL, salt: '', hash: '', sv: 1, admin: true, created: new Date().toISOString() });
+  saveUsers(db);
+  console.log(`[setup] Admin account created for ${ADMIN_EMAIL}. Set its password with "Forgot password?" on the Calculators page, or run: node server.js reset-link ${ADMIN_EMAIL}`);
 }
 
 /* ---------- sessions (signed, stateless cookies) ---------- */
@@ -186,6 +257,39 @@ async function api(req, res, route) {
     startSession(res, user);
     return json(res, 200, { user: publicUser(user) });
   }
+  if (route === '/api/forgot') {
+    if (limited(ip)) return json(res, 429, { error: 'Too many attempts. Try again in 15 minutes.' });
+    noteAttempt(ip);
+    const email = normEmail(body.email);
+    const done = () => json(res, 200, { ok: true, message: 'If that email has an account, a reset link is on its way. Check your inbox and spam folder.' });
+    const db = loadUsers();
+    const user = db.users.find(u => u.email === email);
+    if (!user) return done();
+    const base = PUBLIC_URL || `https://${String(req.headers['x-forwarded-host'] || req.headers.host || 'harising.cloud').split(',')[0].trim()}`;
+    const link = resetLink(base, issueResetToken(db, user));
+    try {
+      await sendMail({ to: user.email, subject: 'Reset your harising.cloud password', text:
+        `Hi ${user.name || ''},\n\nUse this link to set a new password for the harising.cloud calculators:\n\n${link}\n\nThe link works once and expires in ${RESET_MINUTES} minutes. If you didn't ask for this, ignore this email.\n\nharising.cloud` });
+      console.log(`[reset] email sent to ${user.email}`);
+    } catch (e) {
+      console.warn(`[reset] could not send email (${e.message}). Reset link for ${user.email}: ${link}`);
+    }
+    return done();
+  }
+  if (route === '/api/reset') {
+    if (limited(ip)) return json(res, 429, { error: 'Too many attempts. Try again in 15 minutes.' });
+    noteAttempt(ip);
+    const token = String(body.token || ''), password = String(body.password || '');
+    if (password.length < 8 || password.length > 200) return json(res, 400, { error: 'Password must be at least 8 characters.' });
+    const db = loadUsers(), h = sha256(token);
+    const user = token && db.users.find(u => u.resetHash && u.resetHash.length === h.length && crypto.timingSafeEqual(Buffer.from(u.resetHash), Buffer.from(h)));
+    if (!user || !(user.resetExp > Date.now())) return json(res, 400, { error: 'This reset link is invalid or has expired. Ask for a new one.' });
+    user.salt = crypto.randomBytes(16).toString('hex'); user.hash = await hashPassword(password, user.salt);
+    user.sv = (user.sv || 1) + 1; delete user.resetHash; delete user.resetExp; saveUsers(db);
+    console.log(`[reset] password changed for ${user.email}`);
+    startSession(res, user);
+    return json(res, 200, { user: publicUser(user) });
+  }
   if (route === '/api/logout') {
     res.setHeader('Set-Cookie', sessionCookie('', 0));
     return json(res, 200, { ok: true });
@@ -228,8 +332,17 @@ async function cli(args) {
     if (!u || !b || b.length < 8) { console.log('Usage: node server.js reset <email> <new password of 8+ characters>'); return; }
     u.salt = crypto.randomBytes(16).toString('hex'); u.hash = await hashPassword(b, u.salt); u.sv = (u.sv || 1) + 1; saveUsers(db); console.log('Password updated; existing sessions ended.'); return;
   }
-  console.log('Commands: users | delete <email> | reset <email> <password>');
+  if (cmd === 'add' || cmd === 'reset-link') {
+    const email = normEmail(a);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { console.log(`Usage: node server.js ${cmd} <email>${cmd === 'add' ? ' [name]' : ''}`); return; }
+    let u = db.users.find(x => x.email === email);
+    if (cmd === 'add') { if (u) { console.log('That account already exists.'); return; } u = { id: crypto.randomUUID(), name: b || '', email, salt: '', hash: '', sv: 1, created: new Date().toISOString() }; db.users.push(u); saveUsers(db); console.log('Account added.'); }
+    if (!u) { console.log('No such account.'); return; }
+    console.log(`Password link (valid ${RESET_MINUTES} minutes): ${resetLink(PUBLIC_URL || 'https://harising.cloud', issueResetToken(db, u))}`);
+    return;
+  }
+  console.log('Commands: users | add <email> [name] | delete <email> | reset <email> <password> | reset-link <email>');
 }
 
 if (process.argv.length > 2) cli(process.argv.slice(2)).catch(e => { console.error(e); process.exit(1); });
-else server.listen(PORT, () => console.log(`harising.cloud listening on :${PORT} (signup: ${SIGNUP}, data: ${DATA_DIR})`));
+else { ensureAdmin(); server.listen(PORT, () => console.log(`harising.cloud listening on :${PORT} (signup: ${SIGNUP}, data: ${DATA_DIR}, email: ${SMTP.user ? 'on' : 'off'})`)); }

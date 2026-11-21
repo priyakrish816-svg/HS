@@ -4,8 +4,11 @@ services:
     restart: unless-stopped
     environment:
       - SESSION_SECRET=${SESSION_SECRET}
-      - SIGNUP=${SIGNUP:-open}
-      - SIGNUP_CODE=${SIGNUP_CODE:-}
+      - SIGNUP=${SIGNUP:-closed}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-ozharising@gmail.com}
+      - PUBLIC_URL=${PUBLIC_URL:-https://harising.cloud}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
     volumes:
       - harising-data:/data
     expose:
