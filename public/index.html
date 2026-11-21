@@ -307,6 +307,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .aerr{color:#e8251a;font-weight:600;min-height:1.4em;margin:4px 0 10px}
 .authinfo ul{margin:6px 0 14px;padding-left:20px;color:var(--mute)}
 .ahd{display:flex;align-items:center;gap:8px;font-weight:600;margin:10px 0 0}
+.auth.one{grid-template-columns:minmax(0,1fr);max-width:480px}
+.afl{margin:12px 0 0;text-align:center}.afl a{color:var(--link);font-weight:600}
+.aok{color:#1f8a4c;font-weight:600;margin:4px 0 10px}
 .acct{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;font-size:15px;color:var(--mute);margin-bottom:6px}
 .acct .btn{min-height:38px;font-size:14px;padding:0 14px}
 @media(max-width:760px){.auth{grid-template-columns:minmax(0,1fr)}}
@@ -1111,7 +1114,7 @@ function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
   view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>Calculators</h1><p>Sign in to use 13 engineering calculators for vibration analysis and machinery lubrication. Results update as you type, and every calculator shows its formula.</p></div></div>
   <div class="band"><div class="wrap auth">
    <div class="authbox">
-    <div class="atabs" role="tablist"><button type="button" role="tab" data-t="login" aria-selected="${tab==='login'}">Log in</button>${canSign?`<button type="button" role="tab" data-t="signup" aria-selected="${tab==='signup'}">Create account</button>`:''}</div>
+    ${canSign?`<div class="atabs" role="tablist"><button type="button" role="tab" data-t="login" aria-selected="${tab==='login'}">Log in</button><button type="button" role="tab" data-t="signup" aria-selected="${tab==='signup'}">Create account</button></div>`:'<h3 style="margin:0 0 16px">Log in</h3>'}
     <form id="af" novalidate>
      ${tab==='signup'?`<div class="cfield"><label for="a-name">Name</label><input id="a-name" autocomplete="name" required maxlength="80"></div>`:''}
      <div class="cfield"><label for="a-email">Email</label><input id="a-email" type="email" autocomplete="email" required maxlength="160"></div>
@@ -1119,12 +1122,14 @@ function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
      ${tab==='signup'&&st.signup==='code'?`<div class="cfield"><label for="a-code">Access code</label><input id="a-code" autocomplete="off" required maxlength="80"><small>Ask Hariharan for a code.</small></div>`:''}
      <p class="aerr" id="aerr" role="alert"></p>
      <button class="btn solid" type="submit" id="asub">${tab==='signup'?'Create account':'Log in'}</button>
-     ${!canSign&&tab==='login'?'<p class="cnote">New accounts are by invitation. Contact Hariharan for access.</p>':''}
+     ${tab==='login'?'<p class="afl"><a href="#" id="aforgot">Forgot password?</a></p>':''}
+     ${!canSign&&tab==='login'?'<p class="cnote">This area is private. New accounts can\'t be created.</p>':''}
     </form>
    </div>
    <div class="authinfo"><h3>What's inside</h3>${['v','l'].map(k=>`<p class="ahd"><i class="kd ${k}"></i>${k==='v'?'Vibration':'Lubrication'}</p><ul>${NAMES[k].map(n=>`<li>${n}</li>`).join('')}</ul>`).join('')}</div>
   </div></div>`;
   view.querySelectorAll('.atabs button').forEach(b=>b.addEventListener('click',()=>gate(h,b.dataset.t)));
+  const fg=document.getElementById('aforgot');if(fg)fg.addEventListener('click',e=>{e.preventDefault();forgot(h)});
   const form=document.getElementById('af'),err=document.getElementById('aerr'),sub=document.getElementById('asub');
   form.addEventListener('submit',async e=>{e.preventDefault();err.textContent='';const v=id=>(document.getElementById(id)||{}).value||'';
     const body={email:v('a-email').trim(),password:v('a-pass')};if(tab==='signup'){body.name=v('a-name').trim();body.code=v('a-code').trim()}
@@ -1136,14 +1141,40 @@ function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
       if(!r.ok){err.textContent=j.error||'Something went wrong. Please try again.';sub.disabled=false;sub.textContent=tab==='signup'?'Create account':'Log in';return}
       st.user=j.user;show(h)}catch(ex){err.textContent='Could not reach the server. Check your connection.';sub.disabled=false;sub.textContent=tab==='signup'?'Create account':'Log in'}});
   document.getElementById('a-email').focus({preventScroll:true});document.title='Sign in · Calculators · Hariharan Singaram'}
+function shell(title,sub,inner){view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>${title}</h1><p>${sub}</p></div></div><div class="band"><div class="wrap auth one"><div class="authbox">${inner}</div></div></div>`}
+function forgot(h){shell('Forgot password','Enter your account email and we\'ll send you a link to set a new password.',`<form id="ff" novalidate><div class="cfield"><label for="f-email">Email</label><input id="f-email" type="email" autocomplete="email" required maxlength="160"></div><p class="aerr" id="ferr" role="alert"></p><p class="aok" id="fok" role="status"></p><button class="btn solid" type="submit" id="fsub">Send reset link</button><p class="afl"><a href="#" id="fback">Back to log in</a></p></form>`);
+  document.getElementById('fback').addEventListener('click',e=>{e.preventDefault();gate(h)});
+  const em=document.getElementById('f-email'),err=document.getElementById('ferr'),ok=document.getElementById('fok'),sub=document.getElementById('fsub');em.focus({preventScroll:true});
+  document.getElementById('ff').addEventListener('submit',async e=>{e.preventDefault();err.textContent='';ok.textContent='';const email=em.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Enter a valid email address.';return}
+    sub.disabled=true;sub.textContent='Sending…';
+    try{const r=await fetch('/api/forgot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({email})});const j=await r.json().catch(()=>({}));
+      if(!r.ok){err.textContent=j.error||'Something went wrong. Please try again.'}else{ok.textContent=j.message||'If that email has an account, a reset link is on its way.'}}
+    catch(ex){err.textContent='Could not reach the server. Check your connection.'}
+    sub.disabled=false;sub.textContent='Send reset link'});
+  document.title='Forgot password · Hariharan Singaram'}
+function resetView(token){
+  if(st.mode==='preview'){shell('Set a new password','Password reset works on harising.cloud, where the login server runs.','<p class="cnote">This is the Claude preview, so there is no account to reset here.</p>');return}
+  shell('Set a new password','Choose a new password for your account. The link works once and expires after an hour.',`<form id="rf" novalidate><div class="cfield"><label for="r-p1">New password</label><input id="r-p1" type="password" autocomplete="new-password" required minlength="8" maxlength="200"><small>At least 8 characters.</small></div><div class="cfield"><label for="r-p2">Confirm new password</label><input id="r-p2" type="password" autocomplete="new-password" required minlength="8" maxlength="200"></div><p class="aerr" id="rerr" role="alert"></p><button class="btn solid" type="submit" id="rsub">Save password and log in</button><p class="afl"><a href="#calculators">Back to log in</a></p></form>`);
+  const p1=document.getElementById('r-p1'),p2=document.getElementById('r-p2'),err=document.getElementById('rerr'),sub=document.getElementById('rsub');p1.focus({preventScroll:true});
+  document.getElementById('rf').addEventListener('submit',async e=>{e.preventDefault();err.textContent='';
+    if(p1.value.length<8){err.textContent='Password must be at least 8 characters.';return}
+    if(p1.value!==p2.value){err.textContent='The two passwords don\'t match.';return}
+    sub.disabled=true;sub.textContent='Saving…';
+    try{const r=await fetch('/api/reset',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({token,password:p1.value})});const j=await r.json().catch(()=>({}));
+      if(!r.ok){err.textContent=j.error||'Something went wrong. Please try again.';sub.disabled=false;sub.textContent='Save password and log in';return}
+      st.user=j.user;history.replaceState(null,'','#calculators');show('calculators')}
+    catch(ex){err.textContent='Could not reach the server. Check your connection.';sub.disabled=false;sub.textContent='Save password and log in'}});
+  document.title='Set a new password · Hariharan Singaram'}
 function bar(){const head=view.querySelector('.cv-head .wrap');if(!head)return;const d=document.createElement('div');d.className='acct';
   d.innerHTML=st.mode==='preview'?'<span>Preview mode: on harising.cloud visitors sign in first.</span>':`<span>Signed in as <b>${esc(st.user.name||st.user.email)}</b></span><button type="button" class="btn" id="alog">Log out</button>`;head.prepend(d);
   const lo=document.getElementById('alog');if(lo)lo.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:'{}'})}catch(e){}st.user=null;gate(location.hash.slice(1))})}
 async function show(h){if(st.mode===null){view.innerHTML='<div class="band"><div class="wrap"><p class="cnote">Loading…</p></div></div>';await check()}
+  if(h.startsWith('reset-'))return resetView(h.slice(6));
   if(st.mode==='server'&&!st.user)return gate(h);
   try{await loadModule()}catch(e){view.innerHTML='<div class="band"><div class="wrap"><p class="aerr">The calculators could not load. Refresh the page to try again.</p></div></div>';return}
   window.HSCalc.show(h);bar()}
-function route(){const h=decodeURIComponent(location.hash.slice(1)),isC=h==='calculators'||h==='calc-vib'||h==='calc-lube'||h.startsWith('c-');
+function route(){const h=decodeURIComponent(location.hash.slice(1)),isC=h==='calculators'||h==='calc-vib'||h==='calc-lube'||h.startsWith('c-')||h.startsWith('reset-');
   home.hidden=isC;view.hidden=!isC;
   if(isC){show(h);scrollTo({top:0,behavior:'instant'});document.activeElement?.blur()}
   else{document.title='Hariharan Singaram';if(h){const el=document.getElementById(h);if(el)requestAnimationFrame(()=>el.scrollIntoView())}}}
