@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hariharan Singaram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday-professional portfolio for a reliability engineer: confident, precise, industrial
+   IDEA a handheld vibration analyser and plant floor: machine train, spectrum screen, lube ID tags, safety-yellow signage
+   PICTURE live instrument panel: motor + gearbox that shakes with the chosen fault, FFT spectrum redrawn in real time, ISO zone readout
+   COLOUR steel ground, black ink, safety yellow #ffc700 fields, alarm red for faults, dark analyser screen
+   TYPE Barlow Condensed (plant signage) + Barlow
+   LAYOUT laptop: name across top, full-width panel beneath (machine 40 / spectrum 60), yellow stats band; phone: name, machine, spectrum, controls stacked */
+:root{color-scheme:light dark;--bg:light-dark(#e9edf0,#121619);--ink:light-dark(#0f1417,#e8ecef);--mute:light-dark(#47535a,#9eabb2);--card:light-dark(#ffffff,#1a2024);--line:light-dark(#c8d0d5,#2d363c);--y:#ffc700;--red:#e8251a;--link:light-dark(#0b57c9,#7cb6ff);--panel:#101517;--screen:#0a0e10}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Condensed",Barlow,sans-serif;line-height:1.05;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h2{font-size:clamp(32px,4.4vw,48px);margin-bottom:20px}
+h3{font-size:22px;font-weight:600}
+a{color:var(--link)}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(36px,5vw,72px) max(5vw,16px)}
+nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:8px 20px;flex-wrap:wrap;padding:10px max(5vw,16px)}
+.logo{font:700 22px "Barlow Condensed",sans-serif;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px;margin-right:auto}
+.logo i{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--y);color:#111;font-style:normal;border-radius:6px}
+nav .links{display:flex;gap:4px 16px;flex-wrap:wrap}
+nav .links a{color:var(--ink);text-decoration:none;font-weight:500;padding:8px 2px;border-bottom:2px solid transparent}
+nav .links a:hover,nav .links a:focus-visible{border-color:var(--y)}
+.hero-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px 48px;align-items:center;margin-bottom:28px}
+.htext .intro{margin-top:18px}
+.legend{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:22px;font-size:15px;color:var(--mute)}
+.lg::before{content:"";display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px}
+.lg.l::before{background:#ffc700}.lg.v::before{background:#5aa2ff}
+.orbit{margin:0;display:grid;justify-items:center}
+.orbit svg{width:100%;max-width:470px;height:auto;overflow:visible}
+.orbit .st{cursor:pointer}
+.orbit .st .ring{transition:stroke-width .2s}
+.orbit .st.on .ring{stroke-width:4}
+.orbit .st.on .lab{font-weight:700;fill:var(--ink)}
+.orbit .lab{font:500 13px Barlow,sans-serif;fill:var(--mute)}
+.orbit figcaption{min-height:3.4em;text-align:center;max-width:36ch;margin-top:4px}
+.orbit figcaption b{display:block;font:600 22px "Barlow Condensed",sans-serif}
+.orbit figcaption span{color:var(--mute)}
+.ph{opacity:0;transition:opacity .9s ease,transform 3.2s ease;transform-box:view-box;transform-origin:230px 230px;transform:scale(1.08)}
+.ph.on{opacity:1;transform:scale(1)}
+/* plant floor gallery */
+.floor{background:#111619;color:#e8ecef}
+.floor h2{color:#fff}
+.floor .sub{color:#b9c4ca;margin:-8px 0 24px;max-width:60ch}
+.gal{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:14px;perspective:1200px}
+.shot{position:relative;margin:0;height:clamp(380px,40vw,540px);border-radius:14px;overflow:hidden;cursor:zoom-in;background:#1a2226;transform-style:preserve-3d;transition:transform .25s ease,box-shadow .25s ease;outline:none}
+.shot:focus-visible{box-shadow:0 0 0 3px var(--y)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block;animation:kb 18s ease-in-out infinite alternate;will-change:transform}
+.shot:nth-child(2) img{animation-delay:-5s;animation-name:kb2}
+.shot:nth-child(3) img{animation-delay:-9s}
+.shot:nth-child(4) img{animation-delay:-13s;animation-name:kb2}
+@keyframes kb{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.14) translate(-2%,-2%)}}
+@keyframes kb2{from{transform:scale(1.12) translate(1.5%,1%)}to{transform:scale(1.02) translate(0,0)}}
+.shot::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,#ffffff2e 50%,transparent 60%);transform:translateX(-120%);transition:transform .9s ease;pointer-events:none}
+.shot:hover::after{transform:translateX(120%)}
+.shot figcaption{position:absolute;left:0;right:0;bottom:0;padding:48px 16px 16px;background:linear-gradient(transparent,#0a0e10ee 55%);transform:translateZ(30px)}
+.shot figcaption b{display:block;font:600 22px/1.1 "Barlow Condensed",sans-serif;color:#fff}
+.shot figcaption span{display:block;font-size:14px;color:#c9d2d7;margin-top:4px}
+.shot .chipk{position:absolute;top:12px;left:12px;background:var(--y);color:#111;font-weight:600;font-size:13px;padding:3px 9px;border-radius:12px}
+.shot .chipk.v{background:#5aa2ff}
+.lb{position:fixed;inset:0;z-index:50;background:#05080acc;display:none;place-items:center;padding:16px}
+.lb.open{display:grid;animation:fade .25s}
+.lb img{max-width:min(92vw,1100px);max-height:82vh;border-radius:10px;box-shadow:0 20px 60px #000a;animation:pop .35s ease}
+.lb p{color:#e8ecef;text-align:center;margin:10px 0 0}
+.lb button{position:absolute;min-width:44px;min-height:44px;border-radius:22px;border:1px solid #ffffff40;background:#111619cc;color:#fff;font:600 20px Barlow,sans-serif;cursor:pointer}
+.lb .x{top:16px;right:16px}.lb .pv{left:16px;top:50%}.lb .nx{right:16px;top:50%}
+@keyframes fade{from{opacity:0}}@keyframes pop{from{transform:scale(.94);opacity:0}}
+.me{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--y);margin-bottom:14px;display:block}
+@media(max-width:900px){.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.shot{flex:0 0 78%;scroll-snap-align:start;height:440px}.shot:first-child{flex-basis:92%}}
+@media(prefers-reduced-motion:reduce){.shot img{animation:none}}
+.hero h1{font-size:clamp(48px,8vw,96px);font-weight:700}
+.role{font:600 clamp(20px,2.4vw,26px)/1.2 "Barlow Condensed",sans-serif;margin-top:10px}
+.role span{background:var(--y);color:#111;padding:0 6px;border-radius:3px}
+.intro{color:var(--mute);margin:0 0 14px;max-width:46ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:6px;font-weight:600;text-decoration:none;border:2px solid var(--ink);color:var(--ink);background:transparent;font-size:16px;cursor:pointer;font-family:inherit}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+/* instrument panel */
+.panel{background:var(--panel);color:#e8ecef;border-radius:14px;padding:16px;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);grid-template-areas:"mach spec" "ctrl ctrl";gap:14px;box-shadow:0 1px 0 #ffffff14 inset}
+.mach{grid-area:mach;background:linear-gradient(#1b2327,#13191c);border-radius:10px;position:relative;min-height:300px}
+.mach svg{position:absolute;inset:0;width:100%;height:100%}
+.spec{grid-area:spec;background:var(--screen);border-radius:10px;border:1px solid #263036;position:relative;min-height:300px}
+.spec svg{position:absolute;inset:0;width:100%;height:100%}
+.vtabs{position:absolute;top:8px;right:8px;z-index:2;display:flex;gap:4px;background:#151c20;border:1px solid #263036;border-radius:20px;padding:3px}
+.vtabs button{min-height:32px;padding:0 12px;border:0;border-radius:16px;background:transparent;color:#b9c4ca;font:500 14px Barlow,sans-serif;cursor:pointer}
+.vtabs button[aria-pressed=true]{background:var(--y);color:#111}
+.spec svg text{font:13px Barlow,sans-serif;fill:#8f9ca3}
+.spec svg text.pk{fill:#fff;font-weight:600;paint-order:stroke;stroke:var(--screen);stroke-width:4px}
+.ctrl{grid-area:ctrl;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 24px;align-items:center}
+.faults{display:flex;flex-wrap:wrap;gap:8px}
+.faults button{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid #3a464d;background:#182025;color:#e8ecef;font:500 15px Barlow,sans-serif;cursor:pointer}
+.faults button[aria-pressed=true]{background:var(--y);color:#111;border-color:var(--y)}
+.rpm{display:flex;align-items:center;gap:10px;font-size:15px;color:#b9c4ca}
+.rpm input{width:180px;accent-color:var(--y);height:44px}
+.rpm b{color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;min-width:6.5ch}
+.readout{display:flex;align-items:center;gap:14px;flex-wrap:wrap;grid-column:1/-1;border-top:1px solid #263036;padding-top:12px;font-size:15px;color:#b9c4ca}
+.zone{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:6px;font-weight:600;color:#111;white-space:nowrap}
+.ovr{font:700 30px "Barlow Condensed",sans-serif;color:#fff;white-space:nowrap}
+.diag{flex:1 1 280px;color:#d5dde1}
+.hint{font-size:14px;color:var(--mute);margin:10px 2px 0}
+/* stats */
+.stats{background:var(--y);color:#111}
+.stats .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
+.stat b{display:block;font:700 clamp(44px,6vw,64px)/1 "Barlow Condensed",sans-serif;white-space:nowrap}
+.stat span{display:block;margin-top:6px;font-weight:500;max-width:26ch}
+/* about */
+.about .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px 56px}
+.about p{margin:0 0 14px;max-width:66ch}
+.wins{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.wins li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px 14px 52px;position:relative}
+.wins li svg{position:absolute;left:14px;top:15px;width:24px;height:24px}
+/* experience */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tabs button{min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 15px Barlow,sans-serif;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tl{list-style:none;margin:0;padding:0 0 0 28px;position:relative}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:3px;background:var(--line);border-radius:2px}
+.job{position:relative;margin-bottom:12px}
+.job::before{content:"";position:absolute;left:-26px;top:22px;width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--mute)}
+.job.now::before{background:var(--y);border-color:#111}
+.job details{background:var(--card);border:1px solid var(--line);border-radius:10px}
+.job summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;align-items:baseline}
+.job summary::-webkit-details-marker{display:none}
+.job summary:focus-visible{outline:3px solid var(--y);border-radius:10px}
+.job .co{color:var(--mute);font-weight:500}
+.job .when{color:var(--mute);font-size:14px;white-space:nowrap;text-align:right}
+.job .more{grid-column:1/-1;font-size:14px;color:var(--link);font-weight:600}
+.job details[open] .more{display:none}
+.job ul{margin:0;padding:0 16px 16px 34px}
+.job li{margin-bottom:6px}
+.job[hidden]{display:none}
+.badge{display:inline-block;font-size:13px;font-weight:600;background:var(--y);color:#111;border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
+/* skills */
+.skills{background:var(--card);border-block:1px solid var(--line)}
+.sk{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sk h3{margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:6px 10px;font-size:15px;transition:transform .15s,background .15s}
+.chip:hover{background:var(--y);color:#111;transform:translateY(-2px)}
+/* certs as lube ID tags */
+.tags{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.tag{position:relative;background:var(--card);border:1px solid var(--line);border-radius:10px 10px 10px 10px;padding:18px 16px 16px 58px;min-height:96px;transition:transform .2s}
+.tag:hover{transform:rotate(-1.5deg) translateY(-2px)}
+.tag::before{content:"";position:absolute;left:14px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--c,#ffc700);box-shadow:inset 0 0 0 7px var(--card),inset 0 0 0 9px color-mix(in srgb,var(--c,#ffc700) 70%,#000)}
+.tag b{display:block;font:600 19px/1.15 "Barlow Condensed",sans-serif}
+.tag small{display:block;color:var(--mute);font-size:14px;margin-top:4px}
+/* edu */
+.edu .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.box p{margin:4px 0 0;color:var(--mute)}
+.box ul{margin:8px 0 0;padding-left:20px}
+.lang{display:grid;gap:10px;margin-top:10px}
+.lang div{display:grid;grid-template-columns:6em minmax(0,1fr);align-items:center;gap:10px;font-size:15px}
+.bar{height:10px;background:var(--bg);border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--y)}
+/* contact */
+.contact{background:#111619;color:#e8ecef}
+.contact .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 56px;align-items:center}
+.contact h2{color:#fff}
+.contact p{color:#b9c4ca;max-width:52ch}
+.cl{display:grid;gap:10px}
+.cl a,.cl div{display:flex;align-items:center;gap:12px;background:#1a2226;border:1px solid #2d383e;border-radius:10px;padding:12px 14px;color:#fff;text-decoration:none;min-height:56px;overflow-wrap:anywhere}
+.cl a:hover{border-color:var(--y)}
+.cl span.k{color:#8f9ca3;font-size:14px;min-width:5.5em}
+.cl button{margin-left:auto;min-height:40px;padding:0 12px;border-radius:6px;border:1px solid var(--y);background:transparent;color:var(--y);font:600 14px Barlow,sans-serif;cursor:pointer}
+footer{background:#0b0f11;color:#8f9ca3;font-size:14px;padding:18px max(5vw,16px)}
+footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:860px){.hero-top,.about .wrap,.contact .wrap{grid-template-columns:minmax(0,1fr)}.panel{grid-template-columns:minmax(0,1fr);grid-template-areas:"mach" "spec" "ctrl"}.mach{min-height:220px}.spec{min-height:260px}.ctrl{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){nav .links{width:100%;overflow-x:auto;flex-wrap:nowrap}nav .links a{flex:none}.job summary{grid-template-columns:minmax(0,1fr)}.job .when{text-align:left}.rpm input{width:100%;flex:1}.rpm{width:100%}}
+@media(max-width:600px){.orbit .lab{font-size:16px}}
+/* paper machine shift scene */
+.shift .sub{color:var(--mute);margin:-8px 0 20px;max-width:62ch}
+.scene{border-radius:14px;overflow:hidden;background:#1c252b;box-shadow:0 20px 50px #0003}
+#mill{display:block;width:100%;height:auto;aspect-ratio:1200/440}
+#mill text{font-family:"Barlow Condensed",Barlow,sans-serif}
+.shift-ui{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px 28px;margin-top:18px;align-items:start}
+.stops{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stops button{min-height:52px;text-align:left;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 15px/1.2 Barlow,sans-serif;cursor:pointer;display:flex;gap:10px;align-items:center;transition:transform .2s,border-color .2s}
+.stops button::before{content:"";width:12px;height:12px;border-radius:50%;flex:none;background:var(--k)}
+.stops button small{display:block;color:var(--mute);font-size:13px}
+.stops button[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);transform:translateY(-2px)}
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.task .kind{display:inline-block;font-size:13px;font-weight:600;padding:2px 10px;border-radius:12px;color:#111;background:#5aa2ff}
+.task h3{margin:8px 0 6px}
+.task p{margin:0 0 12px;color:var(--mute)}
+.task .btn{min-height:40px;font-size:15px}
+.note{font-size:13px;color:var(--mute);margin:10px 0 0}
+@media(max-width:760px){#mill{aspect-ratio:640/440}.shift-ui{grid-template-columns:minmax(0,1fr)}.stops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* dividers, lube room, P-F */
+.divider{height:40px;background:var(--bg);overflow:hidden}
+.divider svg{display:block;width:100%;height:100%}
+.divider.oil{height:60px}
+.lube .sub,.pfs .sub{color:var(--mute);margin:-8px 0 20px;max-width:66ch}
+#lroom{display:block;width:100%;height:auto;aspect-ratio:1000/420}
+.lfacts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:14px 22px;margin-top:18px;align-items:start}
+.lfacts div{border-left:4px solid var(--y);padding:2px 0 2px 14px}
+.lfacts b{display:block;font:600 20px "Barlow Condensed",sans-serif}
+.lfacts span{color:var(--mute);font-size:15px}
+.lfacts .btn{min-height:40px;font-size:15px;white-space:nowrap}
+.pfs{background:var(--card);border-block:1px solid var(--line)}
+.pfgrid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:stretch}
+.pfig{position:relative;min-height:380px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.pfig>svg{position:absolute;inset:0;width:100%;height:100%}
+.pfig svg text{font:13px Barlow,sans-serif;fill:var(--mute)}
+.pfig svg text.pl{fill:var(--ink);font-weight:600;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.pfcard{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column}
+.pfcard .kind{align-self:flex-start;font-size:13px;font-weight:600;padding:2px 10px;border-radius:12px;color:#111;background:#ffc700}
+.pfcard h3{margin:10px 0 6px;font-size:28px}
+.pfcard p{margin:0 0 8px;color:var(--mute)}
+.pfcard .lead{color:var(--ink);font-weight:600}
+.pflab{margin-top:auto;font-size:14px;color:var(--mute)}
+#pfr{width:100%;height:44px;accent-color:var(--y)}
+.tag{transform-origin:50% 0}
+.tag::after{content:"";position:absolute;top:6px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--bg);border:2px solid var(--line)}
+.tag:hover{animation:swing 1.1s ease-out;transform:none}
+@keyframes swing{0%{transform:rotate(0)}20%{transform:rotate(7deg)}45%{transform:rotate(-5deg)}65%{transform:rotate(3deg)}85%{transform:rotate(-1deg)}100%{transform:rotate(0)}}
+@media(max-width:760px){.scrollx{overflow-x:auto}#lroom{width:760px;max-width:none}}
+@media(max-width:860px){.lfacts{grid-template-columns:minmax(0,1fr)}.pfgrid{grid-template-columns:minmax(0,1fr)}}
+/* smelter */
+.smelt .sub{color:var(--mute);margin:-8px 0 20px;max-width:64ch}
+#smsvg{display:block;width:100%;height:auto;aspect-ratio:1200/440}
+#smsvg text{font-family:"Barlow Condensed",Barlow,sans-serif}
+.hot{cursor:pointer}
+@media(max-width:760px){#smsvg{aspect-ratio:640/440}}
+/* nav dropdown */
+.dd{position:relative;display:flex}
+.ddt{display:inline-flex!important;align-items:center;gap:5px;font-weight:600!important;color:var(--ink)}
+.ddt::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--y);margin-right:2px}
+.ddm{position:absolute;top:100%;right:0;min-width:230px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 14px 30px #0003;display:none;z-index:20}
+.dd:hover .ddm,.dd:focus-within .ddm{display:grid}
+.ddm a{border:0!important;padding:10px 12px!important;border-radius:6px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.ddm a:hover{background:var(--bg)}
+.kd{width:10px;height:10px;border-radius:50%;display:inline-block}.kd.v{background:#5aa2ff}.kd.l{background:#ffc700}
+@media(max-width:600px){.ddm{display:none!important}}
+/* calculators */
+#calcview{min-height:70vh}
+.cv-head{padding:clamp(28px,4vw,56px) max(5vw,16px) 0}
+.cv-head h1{font-size:clamp(40px,6vw,64px)}
+.cv-head p{color:var(--mute);max-width:70ch;margin:12px 0 0}
+.cv-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 0}
+.cv-tabs a{min-height:44px;display:inline-flex;align-items:center;gap:8px;padding:0 16px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-weight:500}
+.cv-tabs a[aria-current=page]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cv-cat{margin-top:34px}
+.cv-cat h2{display:flex;align-items:center;gap:12px}
+.cv-cat h2 i{width:14px;height:14px;border-radius:50%}
+.cgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 32px}
+.ccard{display:grid;grid-template-columns:120px minmax(0,1fr);gap:18px;align-items:center;text-decoration:none;color:var(--ink);padding:6px;border-radius:12px;transition:background .2s}
+.ccard:hover{background:var(--card)}
+.ccard:hover .cicon{border-color:var(--y);transform:translateY(-3px)}
+.cicon{width:120px;height:120px;border:2px solid var(--line);border-radius:10px;background:var(--card);display:grid;place-items:center;transition:transform .25s,border-color .25s}
+.cicon svg{width:88px;height:88px}
+.ccard b{display:block;font:700 18px/1.2 Barlow,sans-serif;text-transform:uppercase;letter-spacing:.02em;color:var(--link)}
+.ccard span{display:block;color:var(--mute);margin-top:4px}
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;margin-top:20px}
+.cform,.cres{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.cform label{display:block;font-weight:600;font-size:15px;margin:0 0 4px}
+.cfield{margin-bottom:14px}
+.cfield .in{display:flex;align-items:center;gap:8px}
+.cfield input,.cfield select{width:100%;min-height:44px;font:16px Barlow,sans-serif;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.cfield .u{color:var(--mute);font-size:14px;white-space:nowrap;min-width:3em}
+.cfield small{display:block;color:var(--mute);font-size:13px;margin-top:3px}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.big div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
+.big b{display:block;font:700 30px/1.1 "Barlow Condensed",sans-serif;white-space:nowrap}
+.big span{font-size:14px;color:var(--mute)}
+.big .hl{border-color:var(--y);box-shadow:inset 0 0 0 1px var(--y)}
+.rtab{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0}
+.rtab th,.rtab td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.rtab th:first-child,.rtab td:first-child{text-align:left}
+.cnote{font-size:14px;color:var(--mute);margin:10px 0 0}
+.how{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+.how summary{cursor:pointer;font-weight:600;min-height:32px}
+.how code{font-size:14px;background:var(--bg);padding:2px 6px;border-radius:4px}
+.back{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;text-decoration:none}
+.zbar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:10px 0 4px;position:relative}
+.zbar div{display:grid;place-items:center;font-weight:700;font-size:14px;color:#111}
+.zmark{position:absolute;top:-6px;bottom:-6px;width:4px;background:var(--ink);border-radius:2px;transition:left .4s}
+.cfig{position:relative;height:220px;background:#0a0e10;border-radius:10px;margin-top:6px}
+.cfig svg{position:absolute;inset:0;width:100%;height:100%}
+.cfig svg text{font:12.5px Barlow,sans-serif;fill:#9aa6ad}
+.chk{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:8px;font-size:14px}
+.chk label{display:inline-flex;align-items:center;gap:6px;min-height:32px;font-weight:500}
+.chk input{width:18px;height:18px}
+@media(max-width:860px){.cgrid,.calc{grid-template-columns:minmax(0,1fr)}.ccard{grid-template-columns:92px minmax(0,1fr)}.cicon{width:92px;height:92px}.cicon svg{width:68px;height:68px}}
+/* auth */
+.auth{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start;max-width:980px}
+.authbox,.authinfo{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.atabs{display:flex;gap:6px;margin-bottom:18px;background:var(--bg);border-radius:24px;padding:4px}
+.atabs button{flex:1;min-height:42px;border:0;border-radius:20px;background:transparent;color:var(--ink);font:600 15px Barlow,sans-serif;cursor:pointer}
+.atabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.authbox input{width:100%;min-height:46px;font:16px Barlow,sans-serif;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.authbox .btn{width:100%;justify-content:center;min-height:48px}
+.aerr{color:#e8251a;font-weight:600;min-height:1.4em;margin:4px 0 10px}
+.authinfo ul{margin:6px 0 14px;padding-left:20px;color:var(--mute)}
+.ahd{display:flex;align-items:center;gap:8px;font-weight:600;margin:10px 0 0}
+.acct{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;font-size:15px;color:var(--mute);margin-bottom:6px}
+.acct .btn{min-height:38px;font-size:14px;padding:0 14px}
+@media(max-width:760px){.auth{grid-template-columns:minmax(0,1fr)}}
+/* ---- motion layer ---- */
+#prog{position:absolute;left:0;bottom:-1px;height:3px;width:100%;background:var(--y);transform-origin:0 50%;transform:scaleX(0)}
+.hero{position:relative;overflow:hidden}
+#waves{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero>.wrap{position:relative;z-index:1}
+.hero h1 .w{display:inline-block;white-space:nowrap}
+.hero h1 .ch{display:inline-block;animation:rise .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d)*38ms)}
+.hero h1 .ch.done{animation:none}
+.hero h1 .ch.done:hover{animation:buzz .35s linear;color:var(--y)}
+@keyframes rise{from{transform:translateY(70%) rotate(8deg);opacity:0}}
+@keyframes buzz{0%,100%{transform:none}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,-1px)}80%{transform:translate(1px,1px)}}
+.anim .role span{background:linear-gradient(var(--y),var(--y)) no-repeat 0 0/0% 100%;color:var(--ink);animation:wipe .7s .75s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes wipe{to{background-size:100% 100%;color:#111}}
+.anim .role,.anim .htext .intro,.anim .cta,.anim .legend{animation:up .8s cubic-bezier(.2,.8,.2,1) both}
+.anim .role{animation-delay:.55s}.anim .htext .intro{animation-delay:.8s}.anim .cta{animation-delay:.95s}.anim .legend{animation-delay:1.1s}
+.anim .orbit{animation:orbIn 1.3s .2s cubic-bezier(.2,.8,.2,1) both}
+.anim .panel{animation:up 1s 1.1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes up{from{opacity:0;transform:translateY(26px)}}
+@keyframes orbIn{from{opacity:0;transform:scale(.8) rotate(-25deg)}}
+.stats{position:relative;overflow:hidden}
+.stats::before,.stats::after{content:"";position:absolute;left:0;right:0;height:12px;background:repeating-linear-gradient(-45deg,#111 0 14px,transparent 14px 28px);background-size:39.6px 12px;animation:haz 1.4s linear infinite}
+.stats::before{top:0}.stats::after{bottom:0;animation-direction:reverse}
+@keyframes haz{to{background-position:39.6px 0}}
+.stat b{position:relative}
+.ticker{background:#111619;color:#e8ecef;overflow:hidden;padding:18px 0;border-bottom:1px solid #2d383e}
+.tk{display:flex;width:max-content;animation:tick 48s linear infinite}
+.tk.rev{animation-direction:reverse;animation-duration:60s;color:var(--y);margin-top:6px}
+.ticker:hover .tk{animation-play-state:paused}
+.tk span{display:flex;align-items:center;gap:26px;padding-right:26px;font:600 clamp(22px,3vw,34px)/1.2 "Barlow Condensed",sans-serif;white-space:nowrap}
+.tk i{width:14px;height:14px;border-radius:50%;border:3px solid currentColor;opacity:.6;flex:none}
+@keyframes tick{to{transform:translateX(-50%)}}
+.rv{opacity:0;transform:translateY(32px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+.rv.in{opacity:1;transform:none}
+h2.rv{opacity:1;transform:none;clip-path:inset(-10% 100% -10% 0);transition:clip-path 1s cubic-bezier(.7,0,.2,1)}
+h2.rv.in{clip-path:inset(-10% -2% -10% 0)}
+.tl::after{content:"";position:absolute;left:8px;top:6px;width:3px;height:var(--p,0%);max-height:calc(100% - 12px);background:var(--y);border-radius:2px;box-shadow:0 0 12px #ffc70099}
+.job.lit::before{border-color:var(--y);box-shadow:0 0 0 5px #ffc70033}
+.job::before{transition:border-color .3s,box-shadow .3s}
+.floor,.contact{background:radial-gradient(640px circle at var(--mx,70%) var(--my,30%),#ffc7001f,transparent 62%),#111619}
+.btn{transition:transform .2s ease,background .2s,color .2s}
+.tag,.box,.wins li{transition:transform .25s ease,box-shadow .25s ease}
+.box:hover,.wins li:hover{box-shadow:0 14px 30px #0002}
+@media(prefers-reduced-motion:reduce){.hero h1 .ch,.anim *,.tk,.stats::before,.stats::after{animation:none!important}.anim .role span{background-size:100% 100%;color:#111}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="logo" href="#top"><i>HS</i>Hariharan Singaram</a>
+  <div class="links"><a href="#floor">On site</a><a href="#shift">Paper mill</a><a href="#smelter">Smelter</a><a href="#about">About</a><a href="#experience">Experience</a><a href="#certifications">Certifications</a><a href="#contact">Contact</a><div class="dd"><a href="#calculators" class="ddt">Calculators<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><div class="ddm"><a href="#calc-vib"><i class="kd v"></i>Vibration calculators</a><a href="#calc-lube"><i class="kd l"></i>Lubrication calculators</a></div></div></div>
+</div><div id="prog"></div></nav>
+
+<main id="home">
+<header class="band hero" id="top"><canvas id="waves" aria-hidden="true"></canvas><div class="wrap">
+  <div class="hero-top">
+    <div class="htext">
+      <h1>Hariharan Singaram</h1>
+      <p class="role"><span>Lubrication Supervisor</span> · Vibration Analyst · Mechanical Engineer</p>
+      <p class="intro">I keep rotating machinery running across Australia's paper and aluminium industries, using lubrication engineering, vibration analysis and condition monitoring to stop failures before they happen. Based in Greater Sydney.</p>
+      <div class="cta"><a class="btn solid" href="#contact">Get in touch</a><a class="btn" href="#experience">See my experience</a></div>
+      <div class="legend"><span class="lg l">Lubrication</span><span class="lg v">Vibration &amp; condition monitoring</span></div>
+    </div>
+    <figure class="orbit">
+      <svg id="orb" viewBox="0 0 460 470" role="img" aria-label="Portrait of Hariharan surrounded by animated lubrication and vibration activities">
+        <defs>
+          <radialGradient id="pg" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#2a3a44"/><stop offset="1" stop-color="#121a1f"/></radialGradient>
+          <clipPath id="pc"><circle cx="230" cy="230" r="108"/></clipPath>
+          <clipPath id="wc"><rect x="-26" y="-20" width="52" height="40"/></clipPath>
+        </defs>
+        <circle cx="230" cy="230" r="150" fill="var(--y)" opacity=".16"/>
+        <g><circle cx="230" cy="230" r="124" fill="none" stroke="var(--mute)" stroke-width="1.5" stroke-dasharray="3 9"/>
+          <animateTransform attributeName="transform" type="rotate" from="0 230 230" to="360 230 230" dur="40s" repeatCount="indefinite"/></g>
+        <g><circle cx="230" cy="106" r="6" fill="#ffc700"/><circle cx="230" cy="354" r="5" fill="#5aa2ff"/>
+          <animateTransform attributeName="transform" type="rotate" from="0 230 230" to="-360 230 230" dur="14s" repeatCount="indefinite"/></g>
+        <circle cx="230" cy="230" r="114" fill="none" stroke="#ffc700" stroke-width="6" stroke-linecap="round" stroke-dasharray="180 537" transform="rotate(-90 230 230)">
+          <animate attributeName="stroke-dashoffset" from="0" to="-717" dur="6s" repeatCount="indefinite"/></circle>
+        <g id="portrait" clip-path="url(#pc)">
+          <circle cx="230" cy="230" r="108" fill="url(#pg)"/>
+          <image class="ph on" data-p="lube" href="img/face-lube.jpg" x="122" y="122" width="216" height="216" preserveAspectRatio="xMidYMid slice"/>
+          <image class="ph" data-p="lube2" href="img/face-lube2.jpg" x="122" y="122" width="216" height="216" preserveAspectRatio="xMidYMid slice"/>
+          <image class="ph" data-p="paper" href="img/face-paper.jpg" x="122" y="122" width="216" height="216" preserveAspectRatio="xMidYMid slice"/>
+          <image class="ph" data-p="hivis" href="img/face-hivis.jpg" x="122" y="122" width="216" height="216" preserveAspectRatio="xMidYMid slice"/>
+        </g>
+        <circle cx="230" cy="230" r="108" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="2"/>
+        <g id="stations"></g>
+      </svg>
+      <figcaption id="act" aria-live="polite"><b>Greasing</b><span>Right grease, right amount, right interval.</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="panel" aria-label="Interactive vibration analyser demo">
+    <div class="mach"><svg id="mach" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Motor driving a gearbox, with a vibration sensor on the bearing housing">
+      <defs>
+        <pattern id="shaftp" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#9aa6ad"/><rect width="5" height="14" fill="#c9d2d7"/></pattern>
+        <linearGradient id="motorg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f6fb5"/><stop offset="1" stop-color="#244c88"/></linearGradient>
+        <linearGradient id="boxg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd23a"/><stop offset="1" stop-color="#d9a400"/></linearGradient>
+      </defs>
+      <rect x="20" y="236" width="360" height="18" rx="3" fill="#2b353a"/>
+      <rect x="20" y="236" width="360" height="4" fill="#3c484e"/>
+      <ellipse cx="200" cy="262" rx="170" ry="6" fill="#000" opacity=".35"/>
+      <g id="train">
+        <g id="motor">
+          <rect x="34" y="104" width="150" height="112" rx="14" fill="url(#motorg)"/>
+          <g fill="#1d3f73">
+            <rect x="46" y="104" width="6" height="112"/><rect x="62" y="104" width="6" height="112"/><rect x="78" y="104" width="6" height="112"/><rect x="94" y="104" width="6" height="112"/><rect x="110" y="104" width="6" height="112"/><rect x="126" y="104" width="6" height="112"/><rect x="142" y="104" width="6" height="112"/>
+          </g>
+          <rect x="34" y="104" width="150" height="6" rx="3" fill="#6f9ad8"/>
+          <rect x="84" y="86" width="44" height="20" rx="3" fill="#244c88"/>
+          <rect x="50" y="216" width="22" height="20" fill="#1d3f73"/><rect x="146" y="216" width="22" height="20" fill="#1d3f73"/>
+          <rect x="168" y="132" width="24" height="56" rx="6" fill="#244c88"/>
+        </g>
+        <rect id="shaft" x="190" y="152" width="70" height="16" fill="url(#shaftp)"/>
+        <rect x="214" y="136" width="22" height="48" rx="4" fill="#59656c"/><rect x="214" y="136" width="22" height="5" rx="2" fill="#8d999f"/>
+        <g id="gbox">
+          <path d="M258 120h104a10 10 0 0 1 10 10v86h-124v-86a10 10 0 0 1 10-10z" fill="url(#boxg)"/>
+          <rect x="248" y="120" width="124" height="7" rx="3" fill="#ffe17a"/>
+          <circle cx="330" cy="176" r="10" fill="#111" opacity=".75"/><circle cx="330" cy="176" r="5" fill="#7fd0ff" opacity=".8"/>
+          <rect x="262" y="216" width="22" height="20" fill="#a77f00"/><rect x="336" y="216" width="22" height="20" fill="#a77f00"/>
+          <rect x="286" y="102" width="20" height="18" rx="3" fill="#333"/><rect x="290" y="96" width="12" height="8" rx="2" fill="#555"/>
+        </g>
+        <g id="sensor"><rect x="176" y="114" width="16" height="20" rx="3" fill="#e8ecef"/><rect x="176" y="114" width="16" height="5" fill="#ffc700"/></g>
+        <path d="M184 114 C 184 70, 120 60, 70 50" fill="none" stroke="#e8251a" stroke-width="3"/>
+      </g>
+      <g id="ripple" fill="none" stroke="#ffc700" opacity=".0"><circle cx="184" cy="124" r="16"/><circle cx="184" cy="124" r="26"/></g>
+      <rect x="20" y="28" width="100" height="38" rx="6" fill="#0a0e10" stroke="#2d383e"/>
+      <text x="30" y="44" fill="#8f9ca3" font-size="11" font-family="Barlow,sans-serif">Sensor · DE bearing</text>
+      <text id="mrpm" x="30" y="60" fill="#ffc700" font-size="14" font-weight="600" font-family="Barlow,sans-serif">1480 RPM</text>
+    </svg></div>
+    <div class="spec"><div class="vtabs" role="group" aria-label="Analyser view"><button type="button" data-m="spec" aria-pressed="true">Spectrum</button><button type="button" data-m="wave" aria-pressed="false">Waveform</button><button type="button" data-m="fall" aria-pressed="false">Waterfall</button></div><svg id="spec" role="img" aria-label="Live vibration analyser display"></svg></div>
+    <div class="ctrl">
+      <div class="faults" role="group" aria-label="Machine condition">
+        <button type="button" data-f="healthy" aria-pressed="true">Healthy</button>
+        <button type="button" data-f="imbalance" aria-pressed="false">Imbalance</button>
+        <button type="button" data-f="misalign" aria-pressed="false">Misalignment</button>
+        <button type="button" data-f="bearing" aria-pressed="false">Bearing defect</button>
+        <button type="button" data-f="loose" aria-pressed="false">Looseness</button>
+      </div>
+      <label class="rpm" for="rpm">Speed <input id="rpm" type="range" min="600" max="3000" step="10" value="1480"> <b id="rpmv">1480 RPM</b></label>
+      <div class="readout" aria-live="polite">
+        <span>Overall</span><span class="ovr" id="ovr">0.9 mm/s</span>
+        <span class="zone" id="zone">Zone A</span>
+        <span class="diag" id="diag">Low running-speed peak, clean noise floor. Machine is in good health.</span>
+      </div>
+    </div>
+  </div>
+  <p class="hint">Try it: pick a fault above and watch the spectrum change. Reading these patterns on pumps, motors, fans and gearboxes is what I do every shift. Demo values are illustrative, banded to ISO 10816-3.</p>
+</div></header>
+
+<section class="band stats" aria-label="Highlights"><div class="wrap">
+  <div class="stat"><b data-n="3" data-s="+ yrs">3+ yrs</b><span>in asset reliability and predictive maintenance</span></div>
+  <div class="stat"><b data-n="200" data-s="+">200+</b><span>single-point automatic lubricators installed and commissioned</span></div>
+  <div class="stat"><b data-n="350" data-s="">350</b><span>motors (approx.) covered by my lubrication planning</span></div>
+  <div class="stat"><b data-n="780" data-s=" m/min">780 m/min</b><span>paper machine speed when I replaced a leaking gearbox sight glass, without downtime</span></div>
+</div></section>
+
+<div class="ticker" aria-hidden="true"><div class="tk" id="tk1"></div><div class="tk rev" id="tk2"></div></div>
+
+<section class="band floor" id="floor"><div class="wrap">
+  <h2>On the plant floor</h2>
+  <p class="sub">Paper machines, lube systems and oil samples: the places where reliability gets made. Click any photo to enlarge it.</p>
+  <div class="gal" id="gal">
+    <figure class="shot" tabindex="0" data-i="0"><img src="img/paper.jpg" alt="Hariharan in hi-vis standing beside a paper machine" loading="lazy"><span class="chipk v">Reliability</span><figcaption><b>Reliability on the paper machine</b><span>Drives, press and dryer sections, rolls and vacuum pumps at a continuous paper mill.</span></figcaption></figure>
+    <figure class="shot" tabindex="0" data-i="1"><img src="img/lube.jpg" alt="Hariharan in a hard hat beside a lube oil system, taking notes" loading="lazy"><span class="chipk">Lubrication</span><figcaption><b>Lubrication engineering</b><span>Oil analysis, grease management and lubricant selection on plant lube systems.</span></figcaption></figure>
+    <figure class="shot" tabindex="0" data-i="2"><img src="img/lube2.jpg" alt="Hariharan reviewing oil samples and an oil analysis report" loading="lazy"><span class="chipk">Lubrication</span><figcaption><b>Oil sample review</b><span>Gear, hydraulic and turbine oil samples checked against analysis reports.</span></figcaption></figure>
+    <figure class="shot" tabindex="0" data-i="3"><img src="img/hivis.jpg" alt="Hariharan in a hi-vis hoodie in a monitoring room" loading="lazy"><span class="chipk v">Condition monitoring</span><figcaption><b>Data to decisions</b><span>Turning condition-monitoring data into maintenance actions.</span></figcaption></figure>
+  </div>
+</div></section>
+<section class="band shift" id="shift"><div class="wrap">
+  <h2>A shift on the paper machine</h2>
+  <p class="sub">Follow a typical route through the mill, from the wire section to the reel. Tap any stop to send me there.</p>
+  <div class="scene"><svg id="mill" viewBox="0 0 1200 440" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Animated illustration of Hariharan carrying out lubrication and vibration tasks along a paper machine">
+    <g id="millStatic"></g><g id="fxg"></g>
+    <g id="wk" transform="translate(186 360)"><g id="wkf">
+      <ellipse cx="0" cy="1" rx="20" ry="3.5" fill="#000" opacity=".35"/>
+      <g id="lgb"><rect x="-6" y="-44" width="11" height="44" rx="4" fill="#16223a"/><rect x="-7" y="-6" width="16" height="6" rx="2" fill="#0d0d0d"/></g>
+      <g id="lgf"><rect x="-4" y="-44" width="11" height="44" rx="4" fill="#1e2d4d"/><rect x="-5" y="-6" width="16" height="6" rx="2" fill="#111"/></g>
+      <rect x="-8" y="-82" width="9" height="34" rx="4" fill="#e86a10" transform="rotate(8 -4 -80)"/>
+      <rect x="-15" y="-88" width="30" height="48" rx="9" fill="#ff7a1a"/>
+      <rect x="-15" y="-60" width="30" height="4" fill="#d3dade"/><rect x="-15" y="-49" width="30" height="4" fill="#d3dade"/>
+      <rect x="-9" y="-88" width="3" height="28" fill="#d3dade"/><rect x="6" y="-88" width="3" height="28" fill="#d3dade"/>
+      <g id="ana" display="none"><rect x="3" y="-76" width="18" height="13" rx="2" fill="#151b1e" stroke="#ffc700" stroke-width="1.5"/><path d="M6 -69l3 -3 3 5 3 -6 3 4" fill="none" stroke="#5aa2ff" stroke-width="1.2"/></g>
+      <rect x="-3" y="-93" width="9" height="7" fill="#7d4f33"/>
+      <circle cx="2" cy="-99" r="11" fill="#8d5b3d"/>
+      <path d="M-6 -97 Q3 -85 12 -97 L12 -92 Q3 -82 -6 -92Z" fill="#1b1410"/>
+      <rect x="4" y="-102" width="10" height="4.5" rx="2" fill="#bfe4ff" opacity=".8"/>
+      <path d="M-11 -103 Q-10 -117 2 -117 Q15 -117 15 -103Z" fill="#f4f4f2"/><rect x="-12" y="-104" width="31" height="3.5" rx="1.7" fill="#dcdcd9"/>
+      <g id="phn" display="none"><path d="M-6 -104 Q2 -122 10 -104" fill="none" stroke="#222" stroke-width="2.5"/><circle cx="-3" cy="-98" r="5" fill="#e8251a"/></g>
+      <g id="arm" transform="rotate(80 6 -80)">
+        <rect id="armr" x="6" y="-84" width="26" height="8" rx="4" fill="#ff7a1a"/>
+        <circle id="hand" cx="32" cy="-80" r="4.6" fill="#1a1a1a"/>
+        <g id="tool" transform="translate(32 -80)">
+          <g data-t="probe"><line x1="0" y1="0" x2="14" y2="0" stroke="#c9d2d7" stroke-width="3"/><circle cx="14" cy="0" r="2.6" fill="#ffc700"/></g>
+          <g data-t="grease"><rect x="-10" y="-6" width="18" height="12" rx="3" fill="#e8251a"/><rect x="-10" y="-6" width="18" height="3" rx="1.5" fill="#ff6a5f"/><line x1="8" y1="0" x2="22" y2="0" stroke="#c9d2d7" stroke-width="3"/><g><line x1="-2" y1="-6" x2="-12" y2="-16" stroke="#c9d2d7" stroke-width="2.5" stroke-linecap="round"/><animateTransform attributeName="transform" type="rotate" values="0 -2 -6;-25 -2 -6;0 -2 -6" dur=".9s" repeatCount="indefinite"/></g></g>
+          <g data-t="bottle"><line x1="0" y1="0" x2="12" y2="0" stroke="#9fd3ff" stroke-width="2"/><rect x="-5" y="3" width="11" height="17" rx="3" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="-3.5" y="18" width="8" height="0" fill="#d9a400"><animate attributeName="height" values="0;13;13" keyTimes="0;.8;1" dur="3.5s" repeatCount="indefinite"/><animate attributeName="y" values="18.5;5.5;5.5" keyTimes="0;.8;1" dur="3.5s" repeatCount="indefinite"/></rect><rect x="-3" y="0" width="7" height="4" fill="#e8251a"/></g>
+          <g data-t="spl"><rect x="0" y="-9" width="12" height="20" rx="4" fill="#e8ecef"/><rect x="2" y="-6" width="8" height="13" rx="2" fill="#ffc700"/></g>
+          <g data-t="tablet"><rect x="0" y="-11" width="22" height="15" rx="2" fill="#151b1e" stroke="#5aa2ff" stroke-width="1.5"/><path d="M3 -4h5l2 -4 3 7 2 -3h4" fill="none" stroke="#5aa2ff" stroke-width="1.2"/></g>
+        </g>
+      </g>
+    </g></g>
+  </svg></div>
+  <div class="shift-ui">
+    <div class="stops" id="stops" role="group" aria-label="Route stops"></div>
+    <div class="task" aria-live="polite"><span class="kind" id="tkind">Vibration</span><h3 id="ttitle">Vibration route</h3><p id="tdesc"></p><button id="tour" class="btn" type="button" aria-pressed="false">Pause tour</button></div>
+  </div>
+  <p class="note">Illustration of typical tasks, not to scale.</p>
+</div></section>
+
+<section class="band smelt" id="smelter"><div class="wrap">
+  <h2>Inside an aluminium smelter</h2>
+  <p class="sub">Potlines run around the clock in heat, dust and fumes, so every pump, fan and gearbox matters. Watch the pot tending machine work the line, then pick a monitoring point.</p>
+  <div class="scene"><svg id="smsvg" viewBox="0 0 1200 440" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Animated aluminium smelter potroom with a pot tending machine, reduction cells, fume treatment fan and condition monitoring points"><g id="smStatic"></g><g id="ptm"></g><g id="sparks"></g><g id="hots"></g></svg></div>
+  <div class="shift-ui">
+    <div class="stops" id="smstops" role="group" aria-label="Monitoring points"></div>
+    <div class="task" aria-live="polite"><span class="kind" id="smk">Vibration</span><h3 id="smt"></h3><p id="smd"></p><button id="smtour" class="btn" type="button" aria-pressed="false">Pause tour</button></div>
+  </div>
+  <p class="note">Illustration of typical smelter equipment, not to scale.</p>
+</div></section>
+
+<div class="divider" aria-hidden="true"><svg viewBox="0 0 1200 40" preserveAspectRatio="none"><g><path id="dvw" fill="none" stroke="#ffc700" stroke-width="2"/><animateTransform attributeName="transform" type="translate" from="0 0" to="-200 0" dur="3s" repeatCount="indefinite"/></g></svg></div>
+
+<section class="band lube" id="lube"><div class="wrap">
+  <h2>Clean, cool, dry oil</h2>
+  <p class="sub">Most bearing and gearbox failures start with contaminated or wrong lubricant. In the lube room I keep oil clean, dry and correctly identified before it ever reaches a machine.</p>
+  <div class="scene scrollx" id="lscene"><svg id="lroom" viewBox="0 0 1000 420" role="img" aria-label="Animated lube room: a filter cart cleans oil while a particle counter shows the ISO cleanliness code falling to target">
+    <defs><linearGradient id="lwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22303a"/><stop offset="1" stop-color="#2d3e49"/></linearGradient><clipPath id="f1c"><rect x="463" y="214" width="28" height="84" rx="5"/></clipPath><clipPath id="f2c"><rect x="508" y="214" width="28" height="84" rx="5"/></clipPath></defs>
+    <rect width="1000" height="330" fill="url(#lwall)"/><rect y="330" width="1000" height="90" fill="#20282c"/><line x1="0" y1="344" x2="1000" y2="344" stroke="#ffc700" stroke-width="3" stroke-dasharray="22 16" opacity=".6"/>
+    <rect x="40" y="36" width="170" height="34" rx="4" fill="#123a6b" stroke="#8fa6bb"/><text x="125" y="59" text-anchor="middle" fill="#fff" font-size="18" font-weight="600" font-family="Barlow Condensed,sans-serif">Lube room</text>
+    <g id="drums"></g>
+    <g id="breather"><rect x="240" y="176" width="26" height="44" rx="6" fill="#e8ecef" opacity=".25" stroke="#e8ecef"/><rect x="243" y="179" width="20" height="38" rx="4" fill="#3b82f6"/><rect id="spent" x="243" y="217" width="20" height="0" rx="4" fill="#f472b6"/><rect x="246" y="168" width="14" height="9" rx="2" fill="#9aa6ad"/></g>
+    <text x="282" y="150" fill="#c9d2d7" font-size="14" font-family="Barlow,sans-serif">Desiccant breather</text><text id="brtx" x="282" y="168" fill="#8fbfff" font-size="14" font-family="Barlow,sans-serif">Dry: blue</text>
+    <path id="hin" d="M286 318 C 330 345, 360 340, 398 300" fill="none" stroke="#4a3216" stroke-width="9" stroke-linecap="round"/>
+    <path d="M286 318 C 330 345, 360 340, 398 300" fill="none" stroke="#7a5528" stroke-width="3" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="-32" dur=".7s" repeatCount="indefinite"/></path>
+    <path id="hout" d="M538 300 C 600 304, 630 214, 704 236" fill="none" stroke="#a87a00" stroke-width="9" stroke-linecap="round"/>
+    <path d="M538 300 C 600 304, 630 214, 704 236" fill="none" stroke="#ffd84a" stroke-width="3" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="-32" dur=".7s" repeatCount="indefinite"/></path>
+    <g id="cart"><rect x="380" y="316" width="180" height="12" rx="4" fill="#59656c"/><circle cx="400" cy="336" r="10" fill="#111"/><circle cx="540" cy="336" r="10" fill="#111"/><rect x="384" y="190" width="6" height="128" fill="#59656c"/><rect x="372" y="186" width="24" height="6" rx="3" fill="#59656c"/>
+      <rect x="394" y="270" width="54" height="44" rx="7" fill="#2f5e9e"/><rect x="394" y="270" width="54" height="5" rx="2" fill="#5f8fd0"/>
+      <path d="M448 292 H460 M491 210 V202 H512 V210" fill="none" stroke="#9aa6ad" stroke-width="6"/>
+      <rect x="460" y="210" width="34" height="92" rx="8" fill="#c9d2d7"/><rect x="505" y="210" width="34" height="92" rx="8" fill="#c9d2d7"/>
+      <rect x="463" y="214" width="28" height="84" rx="5" fill="#d9a400" opacity=".35"/><rect x="508" y="214" width="28" height="84" rx="5" fill="#d9a400" opacity=".35"/>
+      <g clip-path="url(#f1c)" id="cap1"></g><g clip-path="url(#f2c)" id="cap2"></g>
+      <text x="477" y="320" text-anchor="middle" fill="#111" font-size="11" font-family="Barlow,sans-serif" font-weight="600">10µ</text><text x="522" y="320" text-anchor="middle" fill="#111" font-size="11" font-family="Barlow,sans-serif" font-weight="600">3µ</text>
+      <circle cx="500" cy="186" r="13" fill="#e8ecef"/><circle cx="500" cy="186" r="10" fill="#151b1e"/><line id="needle" x1="500" y1="186" x2="500" y2="178" stroke="#e8251a" stroke-width="2"/></g>
+    <g id="gbx"><rect x="704" y="226" width="120" height="104" rx="8" fill="#e6b300"/><rect x="704" y="226" width="120" height="7" rx="3" fill="#ffd84a"/><rect x="752" y="208" width="18" height="18" rx="3" fill="#3b82f6"/><circle cx="790" cy="290" r="15" fill="#111"/><clipPath id="sgc"><circle cx="790" cy="290" r="12"/></clipPath><g clip-path="url(#sgc)"><rect id="lvl" x="776" y="296" width="28" height="20" fill="#d9a400"/></g><circle cx="790" cy="290" r="12" fill="none" stroke="#fff" stroke-opacity=".5"/><rect x="716" y="246" width="40" height="22" rx="3" fill="#ffc700" stroke="#111"/><text x="736" y="262" text-anchor="middle" fill="#111" font-size="12" font-weight="700" font-family="Barlow,sans-serif">220</text></g>
+    <g id="pcount"><rect x="560" y="44" width="200" height="118" rx="10" fill="#0a0e10" stroke="#2d383e"/><text x="576" y="68" fill="#8f9ca3" font-size="14" font-family="Barlow,sans-serif">Particle count · ISO 4406</text><text id="iso" x="576" y="112" fill="#ffc700" font-size="40" font-weight="700" font-family="Barlow Condensed,sans-serif">21/19/16</text><text x="576" y="136" fill="#8f9ca3" font-size="13" font-family="Barlow,sans-serif">Target 16/14/11</text><rect x="576" y="144" width="168" height="6" rx="3" fill="#1f292e"/><rect id="isobar" x="576" y="144" width="0" height="6" rx="3" fill="#ffc700"/><g id="tick" opacity="0"><circle cx="730" cy="100" r="13" fill="#2fb36b"/><path d="M724 100l4 4 8-9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></g></g>
+    <g id="guns"></g>
+    <g id="parts"></g>
+  </svg></div>
+  <div class="lfacts">
+    <div><b>Filtration</b><span>Kidney-loop filtering through 10 and 3 micron elements until the oil reaches its ISO 4406 cleanliness target.</span></div>
+    <div><b>Moisture control</b><span>Desiccant breathers stop humid air getting in. The beads change colour as they absorb water, so I know when to swap them.</span></div>
+    <div><b>Identification</b><span>Colour-coded tags on every drum, container, grease gun and fill point, so the right oil goes in the right machine.</span></div>
+    <button id="lrun" class="btn" type="button" aria-pressed="false">Pause filtration</button>
+  </div>
+</div></section>
+
+<section class="band pfs" id="pf"><div class="wrap">
+  <h2>Catch it early: the P-F curve</h2>
+  <p class="sub">From the first sign of a problem (P) to functional failure (F), each technique sees trouble at a different point. Oil analysis, ultrasound and vibration see it months ahead. Noise and heat give days. That early window is where I work.</p>
+  <div class="pfgrid">
+    <div class="fig pfig"><svg id="pfsvg" role="img" aria-label="P-F curve showing when each technique detects a developing failure"></svg></div>
+    <div class="pfcard" aria-live="polite"><span class="kind" id="pfk">Lubrication</span><h3 id="pft">Oil analysis</h3><p id="pfd"></p><p class="lead" id="pfl"></p>
+      <label for="pfr" class="pflab">Drag along the curve</label><input id="pfr" type="range" min="0" max="1000" value="0"></div>
+  </div>
+</div></section>
+
+<div class="divider oil" aria-hidden="true"><svg viewBox="0 0 1200 60" preserveAspectRatio="xMidYMid slice"><line x1="0" y1="8" x2="1200" y2="8" stroke="#d9a400" stroke-width="3"/><g id="drips"></g></svg></div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer"><button class="x" type="button" aria-label="Close">×</button><button class="pv" type="button" aria-label="Previous photo">‹</button><div><img id="lbimg" alt=""><p id="lbcap"></p></div><button class="nx" type="button" aria-label="Next photo">›</button></div>
+
+<section class="band about" id="about"><div class="wrap">
+  <div>
+    <h2>Reliability through better lubrication</h2>
+    <p>I'm a Mechanical Engineer with more than three years in asset reliability, machinery lubrication, predictive maintenance and vibration-based condition monitoring, across Australia's paper manufacturing and aluminium smelting industries.</p>
+    <p>I'm currently Lubrication Supervisor at JW Engineering, an internal contractor at Visy's Smithfield paper mill (3 &amp; 6). I lead lubrication management and maintenance coordination, supervising lubrication technicians, mechanical trades and subcontractors through routine work and shutdowns.</p>
+    <p>My technical work brings together hands-on mechanical engineering, vibration analysis, lubrication engineering and condition monitoring. I use it to find equipment problems early, improve maintenance strategies and cut unplanned downtime. I also sit on ICML's Exam Development Committee, helping keep the MLE certification exam accurate and fair.</p>
+    <p>I like solving hard machinery problems and turning condition-monitoring data into maintenance decisions that hold up on the plant floor.</p>
+  </div>
+  <div>
+    <h3 style="margin-bottom:14px">Key achievements</h3>
+    <ul class="wins" id="wins"></ul>
+  </div>
+</div></section>
+
+<section class="band" id="experience"><div class="wrap">
+  <h2>Experience</h2>
+  <div class="tabs" role="group" aria-label="Filter experience">
+    <button type="button" data-t="all" aria-pressed="true">All roles</button>
+    <button type="button" data-t="rel" aria-pressed="false">Reliability &amp; lubrication</button>
+    <button type="button" data-t="tech" aria-pressed="false">IT &amp; engineering</button>
+    <button type="button" data-t="early" aria-pressed="false">Early career</button>
+  </div>
+  <ol class="tl" id="tl"></ol>
+</div></section>
+
+<section class="band skills" id="skills"><div class="wrap">
+  <h2>Core competencies</h2>
+  <div class="sk" id="sk"></div>
+</div></section>
+
+<section class="band" id="certifications"><div class="wrap">
+  <h2>Certifications</h2>
+  <div class="tags" id="tags"></div>
+</div></section>
+
+<section class="band edu" aria-label="Education, leadership and languages"><div class="wrap">
+  <div class="box"><h3>Education</h3><p><b style="color:var(--ink)">Bachelor of Engineering, Mechanical</b><br>Anna University · 2018 – 2022</p></div>
+  <div class="box"><h3>Leadership &amp; volunteering</h3><p>Anna University Regional Campus Coimbatore, 2018 – 2022</p>
+    <ul><li>Student Coordinator, Entrepreneurship Development Cell</li><li>National Service Scheme volunteer: awareness programs and an annual village-adoption camp</li><li>Student Representative, Anti-Ragging Committee</li></ul></div>
+  <div class="box"><h3>Languages</h3><div class="lang">
+    <div><span>Tamil</span><span class="bar"><i style="width:100%"></i></span></div>
+    <div><span>English</span><span class="bar"><i style="width:85%"></i></span></div>
+    <div><span>French</span><span class="bar"><i style="width:25%"></i></span></div></div>
+    <p style="margin-top:10px;font-size:14px">Full professional · Professional working · Elementary</p></div>
+</div></section>
+
+<section class="band contact" id="contact"><div class="wrap">
+  <div>
+    <img class="me" src="img/face-paper.jpg" alt="Hariharan Singaram">
+    <h2>Let's keep your machines running</h2>
+    <p>I'm open to conversations about lubrication programs, condition monitoring, reliability improvement and shutdown support. Email is the quickest way to reach me.</p>
+  </div>
+  <div class="cl">
+    <div><span class="k">Email</span><a href="mailto:skh8039@gmail.com" style="padding:0;border:0;background:none;min-height:0">skh8039@gmail.com</a><button type="button" id="copy">Copy</button></div>
+    <a href="https://www.linkedin.com/in/harising" target="_blank" rel="noopener"><span class="k">LinkedIn</span>linkedin.com/in/harising</a>
+    <a href="https://harising.cloud" target="_blank" rel="noopener"><span class="k">Portfolio</span>harising.cloud</a>
+    <div><span class="k">Location</span>Greater Sydney, NSW, Australia</div>
+  </div>
+</div></section>
+
+</main>
+<section id="calcview" hidden></section>
+<footer><div class="wrap"><span>© 2026 Hariharan Singaram</span><span>MLE · MLT I (ICML) · Vibration Analyst CAT II · Ultrasound CAT I (Mobius)</span></div></footer>
+
+<script>
+{
+const wins=["Collected vibration data across an entire paper machine within a single shift.","Designed a gearbox oil filtration system with an integrated cooling circuit.","Installed and commissioned automatic lubricators on electric motors.","Replaced a leaking sight glass on a paper machine gearbox running at 780 m/min, with no production downtime.","Improved lubrication reliability through route optimisation and contamination control.","Designed and fabricated a custom breather clogging status checker."];
+const tick='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#ffc700"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+document.getElementById('wins').innerHTML=wins.map(w=>`<li>${tick}${w}</li>`).join('');
+
+const jobs=[
+ {t:"Lubrication Supervisor",c:"JW Engineering Pty Ltd · Internal contractor, Visy Smithfield",w:"Sep 2026 – Present",k:"rel",now:1,d:["Lead lubrication management and maintenance coordination at Visy 3 & 6, Smithfield.","Improve equipment reliability through effective lubrication practice and maintenance execution.","Supervise lubrication technicians, mechanical trades and subcontractors."]},
+ {t:"ICML Exam Development Committee",c:"International Council for Machinery Lubrication",w:"Aug 2026 – Present",k:"rel",now:1,d:["Develop and review ICML certification examination questions.","Check items for technical accuracy, clarity, fairness and alignment with the MLE knowledge level.","Evaluate questions and the exam's Domain of Knowledge (DOK).","Help keep ICML exams consistent and of high quality."]},
+ {t:"Condition Monitoring Technician",c:"SRG Global · Portland, VIC (aluminium smelting)",w:"Jul 2026 – Aug 2026",k:"rel",d:["Condition monitoring on rotating plant in an aluminium smelting environment."]},
+ {t:"Mechanical Engineer – Supervisor",c:"VAP Australia Pty Ltd · Visy internal contractor, Sydney",w:"May 2024 – Apr 2026",k:"rel",d:["Supported reliability, lubrication and condition monitoring at Visy Smithfield's paper and recycling facilities.","Collected vibration data and ran preliminary analysis with the Emerson CSI 2140 on pumps, motors, fans, conveyors, gearboxes, rolls and paper machine assets.","Ran route-based monitoring: FFT spectra, waveforms, trending and machine health assessments.","Identified imbalance, misalignment, looseness, resonance, bearing defects, soft foot and lubrication faults before critical failure.","Managed grease and oil application, lube routes, contamination control and oil inspections.","Installed, commissioned and optimised ATS autolube systems.","Supported shutdowns and reported equipment condition to planners and engineers."]},
+ {t:"Graduate Mechanical Engineer",c:"VAP Australia Pty Ltd · Sydney",w:"Jul 2023 – May 2024",k:"rel",d:["Coordinated site maintenance, shutdowns and reliability improvement projects.","Supervised lubrication technicians, mechanical trades, subcontractors and intern engineers.","Planned work, prepared job scopes and coordinated resources to meet shutdown schedules.","Ran vibration analysis with Emerson CSI 2140 and SKF Microlog, including PeakVue and trending.","Installed and commissioned 200+ single-point automatic lubricators; supported lube planning for about 350 motors.","Raised purchase requests in IFS and coordinated suppliers and contractors.","Contributed to IoT-based digital lube routes and predictive maintenance workflows.","Used PTC Creo, Fusion 360 and 3D printing for design and prototyping."]},
+ {t:"IT & Reverse Engineering Specialist",c:"SKH Technologies (self-employed) · Karaikkudi, India",w:"Feb 2019 – Nov 2024",k:"tech",d:["Founded and ran SKH Technologies as Managing Director.","Reverse-engineered systems to improve performance, security and functionality.","Built front-end interfaces with HTML, CSS and JavaScript, plus back-end database and server integration.","Worked directly with clients to scope their technology needs."]},
+ {t:"Automotive Technician (Trainee)",c:"Moogambigai Automobiles · Coimbatore",w:"Dec 2019 – Mar 2020",k:"early",d:["Diagnosed and repaired two-wheeler engines, mechanical and electrical systems.","Carried out routine maintenance, estimates and service logs."]},
+ {t:"CNC Machinist (Trainee)",c:"Tritech Precision Ltd · Coimbatore",w:"Jun 2019 – Jul 2019",k:"early",d:["Trained on CNC, vertical machining centres (VMC) and lathes."]},
+ {t:"System Admin & Teaching Fellow",c:"AVVN Computer Centre · Kandanur",w:"Apr 2012 – Sep 2018",k:"tech",d:["Installed and configured systems, servers and operating systems.","Solved hardware, software and connectivity problems, and taught students."]},
+ {t:"Automotive Technician (Trainee)",c:"Aiyappa Auto Works · Kandanur",w:"Apr 2018 – Jul 2018",k:"early",d:["Engine assembly, diagnosis and routine two-wheeler maintenance."]}
+];
+const tl=document.getElementById('tl');
+tl.innerHTML=jobs.map((j,i)=>`<li class="job${j.now?' now':''}" data-k="${j.k}"><details${i<2?' open':''}><summary><h3>${j.t}${j.now?'<span class="badge">Current</span>':''}</h3><span class="when">${j.w}</span><span class="co">${j.c}</span><span class="more">Show details</span></summary><ul>${j.d.map(x=>`<li>${x}</li>`).join('')}</ul></details></li>`).join('');
+const tabs=document.querySelectorAll('.tabs button');
+tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>x.setAttribute('aria-pressed',x===b));const t=b.dataset.t;tl.querySelectorAll('.job').forEach(li=>li.hidden=!(t==='all'||li.dataset.k===t))}));
+
+const sk=[["Condition monitoring",["Vibration analysis, ISO 18436-2 CAT II","Emerson CSI 2140","AMS Machinery Manager","SKF Microlog","PeakVue & G-value","FFT spectrum & waveform","Predictive maintenance","RCFA"]],["Lubrication",["Machinery lubrication","Oil condition monitoring","Oil sampling","Contamination control","Lube route optimisation","ATS autolube systems","Single-point lubricators","Hydraulic troubleshooting"]],["Maintenance & planning",["Rotating equipment reliability","Shutdown planning","Job scoping","Machinery installation & alignment","Team supervision","CMMS: SAP, IFS, ECAM"]],["Design & digital",["Fusion 360","PTC Creo","3D printing","IoT digital lube routes","HTML, CSS & JavaScript","Reverse engineering"]]];
+document.getElementById('sk').innerHTML=sk.map(([h,c])=>`<div><h3>${h}</h3><div class="chips">${c.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`).join('');
+
+const certs=[["Machinery Lubrication Engineer (MLE)","ICML","#ffc700"],["Machinery Lubrication Technician I (MLT I)","ICML","#ffc700"],["Vibration Analyst Category II","Mobius Institute · ISO 18436-2","#e8251a"],["Ultrasound Category I","Mobius Institute","#e8251a"],["Working at Heights","Safety","#2f7de1"],["Confined Space Entry","Safety","#2f7de1"],["White Card","Construction induction","#2f7de1"],["Digital Thread: Implementation","Manufacturing","#8a96a0"],["Intelligent Machining","Manufacturing","#8a96a0"],["Code with HTML, CSS & JavaScript","Web development","#8a96a0"]];
+document.getElementById('tags').innerHTML=certs.map(([a,b,c])=>`<div class="tag" style="--c:${c}"><b>${a}</b><small>${b}</small></div>`).join('');
+
+const cp=document.getElementById('copy');
+cp.addEventListener('click',()=>{navigator.clipboard.writeText('skh8039@gmail.com').then(()=>{cp.textContent='Copied';setTimeout(()=>cp.textContent='Copy',1600)}).catch(()=>{cp.textContent='Select it';})});
+
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce){const cio=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;cio.unobserve(en.target);const el=en.target,n=+el.dataset.n,s=el.dataset.s;let t0=null;const step=ts=>{t0??=ts;const p=Math.min(1,(ts-t0)/1600),e=1-(1-p)**3;el.textContent=Math.round(n*e)+s;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.5});document.querySelectorAll('.stat b').forEach(el=>cio.observe(el))}
+
+/* portrait orbit of activities */
+const A=(n,d)=>`<animate attributeName="${n}" ${d} repeatCount="indefinite"/>`;
+const R=(d,extra='')=>`<animateTransform attributeName="transform" ${d} repeatCount="indefinite" ${extra}/>`;
+const acts=[
+ {n:"Greasing",k:"l",t:"Right grease, right amount, right interval on motor and fan bearings.",a:`<rect x="-24" y="-7" width="26" height="14" rx="4" fill="#e8251a"/><rect x="-24" y="-7" width="26" height="4" rx="2" fill="#ff6a5f"/><line x1="2" y1="0" x2="16" y2="0" stroke="#c9d2d7" stroke-width="3"/><path d="M16 -5h6v10h-6z" fill="#9aa6ad"/><g><path d="M-6 -7 L-18 -22" stroke="#c9d2d7" stroke-width="3" stroke-linecap="round"/>${R('type="rotate" values="0 -6 -7;-22 -6 -7;0 -6 -7" dur="1s"')}</g><circle cx="6" cy="0" r="3" fill="#ffc700">${A('cx','values="4;20" dur="1s"')}${A('opacity','values="1;1;0" dur="1s"')}</circle><rect x="-30" y="12" width="60" height="6" rx="2" fill="#59656c"/>`},
+ {n:"Oil top-up",k:"l",t:"Filtered oil top-ups with contamination control on gearboxes and hydraulics.",a:`<g>${R('type="rotate" values="-10;14;14;-10" keyTimes="0;.3;.8;1" dur="2.4s"')}<path d="M-22 -14h18l4 14h-26z" fill="#ffc700"/><path d="M0 -6 L16 -16" stroke="#ffc700" stroke-width="4" stroke-linecap="round"/><rect x="-18" y="-20" width="10" height="6" rx="2" fill="#d9a400"/></g><circle cx="16" cy="-12" r="2.6" fill="#d9a400">${A('cy','values="-12;18" dur=".8s"')}${A('opacity','values="1;1;0" dur=".8s"')}</circle><path d="M4 18h24v8h-24z" fill="#59656c"/><ellipse cx="16" cy="18" rx="0" ry="2" fill="none" stroke="#ffc700">${A('rx','values="1;10" dur=".8s"')}${A('opacity','values="1;0" dur=".8s"')}</ellipse>`},
+ {n:"Oil sampling",k:"l",t:"Representative oil samples sent for analysis to catch wear and contamination early.",a:`<rect x="-11" y="-14" width="22" height="32" rx="5" fill="none" stroke="#e8ecef" stroke-width="2.5"/><rect x="-7" y="-22" width="14" height="8" rx="2" fill="#e8251a"/><rect x="-8.5" y="15" width="17" height="0" rx="3" fill="#d9a400">${A('height','values="0;26;26;0" keyTimes="0;.6;.9;1" dur="3s"')}${A('y','values="15;-11;-11;15" keyTimes="0;.6;.9;1" dur="3s"')}</rect><line x1="-5" y1="-2" x2="5" y2="-2" stroke="#fff" stroke-opacity=".4"/>`},
+ {n:"Auto-lubricators",k:"l",t:"200+ single-point automatic lubricators installed and commissioned on electric motors.",a:`<rect x="-10" y="-24" width="20" height="34" rx="6" fill="#e8ecef"/><rect x="-7" y="-18" width="14" height="24" rx="3" fill="#2a3338"/><rect x="-7" y="-18" width="14" height="24" rx="3" fill="#ffc700">${A('height','values="24;6;24" dur="5s"')}${A('y','values="-18;0;-18" dur="5s"')}</rect><rect x="-4" y="10" width="8" height="8" fill="#9aa6ad"/><circle cx="0" cy="20" r="2.4" fill="#ffc700">${A('cy','values="19;28" dur="1.2s"')}${A('opacity','values="1;0" dur="1.2s"')}</circle>`},
+ {n:"Data collection",k:"v",t:"Route-based vibration data collection with the Emerson CSI 2140.",a:`<rect x="-26" y="6" width="52" height="16" rx="3" fill="#59656c"/><rect x="-6" y="-8" width="12" height="14" rx="2" fill="#e8ecef"/><rect x="-6" y="-8" width="12" height="4" fill="#5aa2ff"/>${[0,.5,1].map(b=>`<circle cx="0" cy="-1" r="6" fill="none" stroke="#5aa2ff" stroke-width="2">${A('r',`values="6;26" dur="1.5s" begin="${b}s"`)}${A('opacity',`values=".9;0" dur="1.5s" begin="${b}s"`)}</circle>`).join('')}`},
+ {n:"Spectrum analysis",k:"v",t:"FFT spectra, waveforms and PeakVue to diagnose faults before failure.",a:`<rect x="-26" y="-20" width="52" height="40" rx="5" fill="#0a0e10" stroke="#2d383e"/><g clip-path="url(#wc)"><path d="${Array.from({length:41},(_,i)=>{const x=-52+i*2.6;return (i?'L':'M')+x.toFixed(1)+' '+(Math.sin(i*.9)*8+Math.sin(i*2.7)*4).toFixed(1)}).join('')}" fill="none" stroke="#5aa2ff" stroke-width="2">${R('type="translate" from="0 0" to="20.8 0" dur="1s"')}</path></g>`},
+ {n:"Bearing health",k:"v",t:"Finding bearing defects and lubricant starvation early on rotating assets.",a:`<circle r="24" fill="#9aa6ad"/><circle r="20" fill="#2a3338"/><g>${R('type="rotate" from="0" to="360" dur="3s"')}${Array.from({length:8},(_,i)=>`<circle cx="${(15*Math.cos(i*Math.PI/4)).toFixed(1)}" cy="${(15*Math.sin(i*Math.PI/4)).toFixed(1)}" r="4.5" fill="#e8ecef"/>`).join('')}</g><circle r="10" fill="#9aa6ad"/><circle r="5" fill="#101517"/>`},
+ {n:"Laser alignment",k:"v",t:"Machinery installation and alignment to cut 2X vibration and coupling wear.",a:`<rect x="-28" y="-2" width="56" height="5" fill="#59656c"/><rect x="-26" y="-14" width="12" height="18" rx="2" fill="#e8ecef"/><rect x="14" y="-14" width="12" height="18" rx="2" fill="#e8ecef"/><line x1="-14" y1="-7" x2="14" y2="-7" stroke="#e8251a" stroke-width="2" stroke-dasharray="4 3">${A('stroke-dashoffset','from="0" to="-14" dur=".6s"')}</line><rect x="-26" y="-14" width="12" height="4" fill="#5aa2ff"/><rect x="14" y="-14" width="12" height="4" fill="#5aa2ff"/>`}
+];
+const orb=document.getElementById('orb'),stG=document.getElementById('stations'),act=document.getElementById('act');
+stG.innerHTML=acts.map((s,i)=>{const ang=-Math.PI/2+i*Math.PI/4,x=230+172*Math.cos(ang),y=230+172*Math.sin(ang),c=s.k==='l'?'#ffc700':'#5aa2ff';
+ return `<g class="st" data-i="${i}" tabindex="0" role="button" aria-label="${s.n}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><g>${R(`type="translate" values="0 0;0 -4;0 0" dur="${3+i%3*.6}s"`)}<circle class="ring" r="37" fill="#101517" stroke="${c}" stroke-width="2"/>${s.a}</g><text class="lab" y="${y<200?-46:56}" text-anchor="middle">${s.n}</text></g>`}).join('');
+let cur=0,hold=0;
+const pmap=["lube","lube2","lube","lube2","paper","hivis","paper","hivis"],phs=orb.querySelectorAll('.ph');
+const setAct=i=>{cur=i;stG.querySelectorAll('.st').forEach((g,j)=>g.classList.toggle('on',j===i));phs.forEach(p=>p.classList.toggle('on',p.dataset.p===pmap[i]));act.innerHTML=`<b style="color:${acts[i].k==='l'?'inherit':'inherit'}">${acts[i].n}</b><span>${acts[i].t}</span>`};
+stG.querySelectorAll('.st').forEach(g=>{const go=()=>{setAct(+g.dataset.i);hold=Date.now()+9000};g.addEventListener('click',go);g.addEventListener('mouseenter',go);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+setAct(0);
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){orb.pauseAnimations()}else{setInterval(()=>{if(Date.now()>hold)setAct((cur+1)%acts.length)},2800)}
+
+/* gallery: tilt + lightbox */
+const shots=[...document.querySelectorAll('.shot')],lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');
+const fine=matchMedia('(hover:hover)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+let li=0,lastFocus=null;
+const show=i=>{li=(i+shots.length)%shots.length;const s=shots[li];lbimg.src=s.querySelector('img').src;lbimg.alt=s.querySelector('img').alt;lbcap.textContent=s.querySelector('b').textContent;lbimg.style.animation='none';lbimg.offsetWidth;lbimg.style.animation=''};
+const openLb=i=>{lastFocus=document.activeElement;show(i);lb.classList.add('open');lb.querySelector('.x').focus()};
+const closeLb=()=>{lb.classList.remove('open');lastFocus?.focus()};
+shots.forEach((s,i)=>{
+  s.addEventListener('click',()=>openLb(i));
+  s.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(i)}});
+  if(fine){s.addEventListener('mousemove',e=>{const r=s.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;s.style.transform=`rotateY(${x*10}deg) rotateX(${-y*10}deg) scale(1.02)`;s.style.boxShadow='0 24px 50px #0008'});
+  s.addEventListener('mouseleave',()=>{s.style.transform='';s.style.boxShadow=''})}
+});
+lb.querySelector('.x').addEventListener('click',closeLb);
+lb.querySelector('.pv').addEventListener('click',()=>show(li-1));
+lb.querySelector('.nx').addEventListener('click',()=>show(li+1));
+lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')show(li-1);if(e.key==='ArrowRight')show(li+1)});
+
+/* vibration analyser */
+const F={
+ healthy:{p:[[1,.7],[2,.25],[3,.1]],floor:.05,d:"Low running-speed peak, clean noise floor. Machine is in good health."},
+ imbalance:{p:[[1,4.4],[2,.35],[3,.15]],floor:.06,d:"Dominant 1X radial peak with little else: classic imbalance. Plan a balance correction."},
+ misalign:{p:[[1,2.2],[2,3.4],[3,1.1],[4,.4]],floor:.06,d:"High 2X with strong 1X and 3X: points to shaft misalignment at the coupling. Laser-align the train."},
+ bearing:{p:[[1,.8],[2,.3],[3.58,1.6],[7.16,1.1],[10.74,.7]],floor:.18,hay:1,d:"Non-synchronous peaks at BPFO and harmonics with a raised noise floor: outer-race bearing defect. Check lubrication and plan a bearing change."},
+ loose:{p:[[.5,.5],[1,1.6],[1.5,.6],[2,1.3],[2.5,.4],[3,1.1],[4,.9],[5,.7],[6,.55],[7,.45],[8,.35]],floor:.08,d:"A long run of harmonics and half-orders: mechanical looseness. Check base bolts, soft foot and bearing fits."}
+};
+const Z=[[1.4,"Zone A","#2fb36b","good"],[2.8,"Zone B","#9bc53d","acceptable"],[4.5,"Zone C","#ffb000","unsatisfactory"],[1e9,"Zone D","#e8251a","unacceptable"]];
+let fault='healthy',rpm=1480;
+const spec=document.getElementById('spec'),rv=document.getElementById('rpmv'),mr=document.getElementById('mrpm'),ovr=document.getElementById('ovr'),zone=document.getElementById('zone'),diag=document.getElementById('diag');
+const train=document.getElementById('train'),pat=document.getElementById('shaftp'),rip=document.getElementById('ripple');
+let seed=7;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+const overall=()=>{const f=F[fault];return Math.sqrt(f.p.reduce((a,[,v])=>a+v*v,0)+ (f.hay?1.2:.2))};
+function readout(){const o=overall(),z=Z.find(z=>o<z[0]);ovr.textContent=o.toFixed(1)+' mm/s';zone.textContent=`${z[1]} · ${z[3]}`;zone.style.background=z[2];diag.textContent=F[fault].d}
+let vmode='spec',hist=[],lastHist=0;
+function vals(N,fmax,x1,t){const f=F[fault],bw=fmax/220,out=new Array(N+1);
+  for(let i=0;i<=N;i++){const fr=i/N*fmax;let v=f.floor*(0.5+rnd());if(f.hay){const c=x1*7;v+=.25*Math.exp(-(((fr-c)/(x1*2.5))**2))*(0.6+rnd()*.8)}
+    for(const [o,a] of f.p){const df=(fr-o*x1)/bw;v+=a*(0.94+0.06*Math.sin((t||0)/300+o))*Math.exp(-(df*df))}out[i]=v}return out}
+function draw(t){
+  const W=spec.clientWidth,H=spec.clientHeight;if(!W||!H)return;
+  const m={l:44,r:14,t:44,b:34},pw=W-m.l-m.r,ph=H-m.t-m.b;
+  const x1=rpm/60,fmax=x1*12,ymax=6,f=F[fault];let g='';
+  seed=7+Math.floor((t||0)/90);
+  if(vmode==='spec'){
+    const X=fr=>m.l+fr/fmax*pw,Y=v=>m.t+ph-Math.min(v,ymax)/ymax*ph;
+    for(let v=0;v<=ymax;v+=2){g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1f292e"/><text x="${m.l-8}" y="${Y(v)+4}" text-anchor="end">${v}</text>`}
+    const step=fmax>600?(W<520?200:100):(W<520?100:50);
+    for(let hz=0;hz<=fmax;hz+=step){g+=`<text x="${X(hz)}" y="${H-12}" text-anchor="middle">${hz}</text>`}
+    g+=`<text x="${W-m.r}" y="${H-12}" text-anchor="end" fill="#5d6a71">Hz</text><text x="${m.l}" y="${m.t-8}" fill="#5d6a71">mm/s</text>`;
+    [[4.5,"#e8251a"],[2.8,"#ffb000"]].forEach(([v,c])=>g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-dasharray="4 5" opacity=".55"/>`);
+    const N=Math.max(200,Math.floor(pw/1.5)),vv=vals(N,fmax,x1,t);let d='';
+    vv.forEach((v,i)=>d+=(i?'L':'M')+X(i/N*fmax).toFixed(1)+' '+Y(v).toFixed(1));
+    g+=`<path d="${d} L${W-m.r} ${Y(0)} L${m.l} ${Y(0)}Z" fill="#ffc700" opacity=".12"/><path d="${d}" fill="none" stroke="#ffc700" stroke-width="1.6" stroke-linejoin="round"/>`;
+    const lab=o=>o===3.58?'BPFO':o===7.16?'2×BPFO':o===10.74?'3×BPFO':o+'X';
+    f.p.filter(([,a])=>a>.55).forEach(([o,a])=>{const x=X(o*x1);if(x<W-m.r-10)g+=`<text class="pk" x="${x}" y="${Math.max(m.t+12,Y(a)-8)}" text-anchor="middle">${lab(o)}</text>`});
+  }else if(vmode==='wave'){
+    const revs=6,T=revs/x1,lim=10,X=tt=>m.l+tt/T*pw,Y=v=>m.t+ph/2-Math.max(-lim,Math.min(lim,v))/lim*ph/2;
+    g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="#2a363c"/>`;
+    for(const v of [-8,-4,4,8])g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#1a2328"/><text x="${m.l-8}" y="${Y(v)+4}" text-anchor="end">${v}</text>`;
+    for(let r=0;r<=revs;r++)g+=`<line x1="${X(r/x1)}" x2="${X(r/x1)}" y1="${m.t}" y2="${m.t+ph}" stroke="#1a2328"/>`;
+    const ms=T*1000,st=ms>200?(W<520?100:50):(W<520?50:25);for(let q=0;q<=ms;q+=st)g+=`<text x="${X(q/1000)}" y="${H-12}" text-anchor="middle">${q}</text>`;
+    g+=`<text x="${W-m.r}" y="${H-12}" text-anchor="end" fill="#5d6a71">ms</text><text x="${m.l}" y="${m.t-8}" fill="#5d6a71">mm/s · one tick per revolution</text>`;
+    const N=Math.max(300,Math.floor(pw)),t0=(t||0)/1000*.12;let d='';
+    for(let i=0;i<=N;i++){const tt=i/N*T,ta=tt+t0;let v=f.floor*4*(rnd()-.5);
+      for(const [o,a] of f.p){if(fault==='bearing'&&o>3)continue;v+=a*1.41*Math.sin(2*Math.PI*o*x1*ta+o)}
+      if(fault==='bearing'){const bp=3.58*x1,ph0=ta*bp,dt=(ph0-Math.floor(ph0))/bp;v+=7*Math.exp(-dt*x1*28)*Math.sin(2*Math.PI*x1*14*dt)}
+      if(fault==='loose')v=Math.min(v,3.2);
+      d+=(i?'L':'M')+X(tt).toFixed(1)+' '+Y(v).toFixed(1)}
+    g+=`<path d="${d}" fill="none" stroke="#ffc700" stroke-width="1.4" stroke-linejoin="round"/>`;
+    const note={healthy:'Smooth, low-amplitude sine',imbalance:'Clean sine, one peak per revolution',misalign:'Two peaks per revolution (2X)',bearing:'Repeating impacts at the bearing fault rate',loose:'Truncated, clipped waveform'}[fault];
+    g+=`<text class="pk" x="${W-m.r}" y="${m.t+14}" text-anchor="end">${note}</text>`;
+  }else{
+    const K=14,dx=Math.min(14,pw*.022),dy=Math.min(11,ph*.055),fw=pw-dx*K,fh=ph-dy*K,N=110;
+    if(!hist.length)hist.push(vals(N,fmax,x1,t));
+    for(let j=Math.min(K,hist.length)-1;j>=0;j--){const vv=hist[hist.length-1-j],ox=m.l+j*dx,oy=m.t+ph-j*dy;
+      const X=i=>ox+i/N*fw,Y=v=>oy-Math.min(v,ymax)/ymax*fh;let d=`M${X(0)} ${oy}`;vv.forEach((v,i)=>d+=`L${X(i).toFixed(1)} ${Y(v).toFixed(1)}`);d+=`L${X(N)} ${oy}Z`;
+      const a=(1-j/K);g+=`<path d="${d}" fill="#0a0e10" stroke="${j?'#ffc700':'#fff'}" stroke-opacity="${(.25+.75*a).toFixed(2)}" stroke-width="${j?1:1.6}"/>`}
+    g+=`<line x1="${m.l}" y1="${m.t+ph}" x2="${m.l+fw}" y2="${m.t+ph}" stroke="#2a363c"/><line x1="${m.l+fw}" y1="${m.t+ph}" x2="${m.l+fw+dx*K}" y2="${m.t+ph-dy*K}" stroke="#2a363c"/>`;
+    g+=`<text x="${m.l+fw/2}" y="${H-12}" text-anchor="middle">Frequency →</text><text x="${m.l+fw+dx*K/2+6}" y="${m.t+ph-dy*K/2+16}" fill="#8f9ca3">Time ↗</text><text x="${m.l}" y="${m.t-8}" fill="#5d6a71">Waterfall: newest spectrum at the front</text>`;
+  }
+  spec.innerHTML=g;
+}
+let last=0,off=0;
+function frame(ts){
+  if(ts-lastHist>450){hist.push(vals(110,rpm/60*12,rpm/60,ts));if(hist.length>20)hist.shift();lastHist=ts}
+  if(ts-last>66){draw(ts);last=ts}
+  const amp=overall();off=(off+rpm/600)%14;pat.setAttribute('patternTransform',`translate(0 ${off})`);
+  const k=Math.min(3,amp*.45);train.setAttribute('transform',`translate(${(Math.sin(ts/23)*k*.6).toFixed(2)} ${(Math.sin(ts/17+1)*k).toFixed(2)})`);
+  rip.setAttribute('opacity',amp>2.8?(.35+.35*Math.sin(ts/120)).toFixed(2):0);
+  requestAnimationFrame(frame);
+}
+document.querySelectorAll('.faults button').forEach(b=>b.addEventListener('click',()=>{fault=b.dataset.f;document.querySelectorAll('.faults button').forEach(x=>x.setAttribute('aria-pressed',x===b));readout();draw(performance.now())}));
+document.querySelectorAll('.vtabs button').forEach(b=>b.addEventListener('click',()=>{vmode=b.dataset.m;document.querySelectorAll('.vtabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw(performance.now())}));
+document.getElementById('rpm').addEventListener('input',e=>{rpm=+e.target.value;rv.textContent=rpm+' RPM';mr.textContent=rpm+' RPM';draw(performance.now())});
+const ro=new ResizeObserver(()=>draw(performance.now()));ro.observe(spec);
+readout();draw(0);
+if(!reduce)requestAnimationFrame(frame);
+
+/* ===== paper machine shift ===== */
+{
+const mill=document.getElementById('mill'),stat=document.getElementById('millStatic'),fxg=document.getElementById('fxg');
+const roll=(x,y,r,dur,fill='#8b969c')=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="${fill}"/><circle r="${r-3}" fill="none" stroke="#ffffff26" stroke-width="2"/><g><line x1="0" y1="0" x2="${r-5}" y2="0" stroke="#ffffff60" stroke-width="2.5"/><circle r="${Math.max(3,r*.18)}" fill="#2a3338"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="${dur}s" repeatCount="indefinite"/></g></g>`;
+const motor=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="#2f5e9e"/>${Array.from({length:Math.floor(w/9)},(_,i)=>`<rect x="${x+5+i*9}" y="${y}" width="4" height="${h}" fill="#244c88"/>`).join('')}<rect x="${x}" y="${y}" width="${w}" height="4" rx="2" fill="#5f8fd0"/>`;
+const sign=(x,w,t)=>`<rect x="${x}" y="40" width="${w}" height="30" rx="3" fill="#123a6b" stroke="#8fa6bb"/><text x="${x+w/2}" y="61" text-anchor="middle" fill="#fff" font-size="17" font-weight="600">${t}</text>`;
+// paper web path (catmull-rom through the machine)
+const topC=[520,580,640,700,760,820],botC=[550,610,670,730,790];
+const pts=[[40,250],[330,250],[400,250],[466,250],[500,196]];
+for(let i=0;i<topC.length;i++){pts.push([topC[i],152]);if(botC[i])pts.push([botC[i],301])}
+pts.push([862,196],[915,183],[897,217],[933,251],[960,236],[1040,170]);
+const cr=p=>{let d=`M${p[0][0]} ${p[0][1]}`;for(let i=0;i<p.length-1;i++){const a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=`C${(b[0]+(c[0]-a[0])/6).toFixed(1)} ${(b[1]+(c[1]-a[1])/6).toFixed(1)},${(c[0]-(e[0]-b[0])/6).toFixed(1)} ${(c[1]-(e[1]-b[1])/6).toFixed(1)},${c[0]} ${c[1]}`}return d};
+const web=cr(pts);
+let s=`<defs><linearGradient id="wallg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2328"/><stop offset="1" stop-color="#2c3a42"/></linearGradient><linearGradient id="flg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4247"/><stop offset="1" stop-color="#22282c"/></linearGradient></defs>
+<rect width="1200" height="360" fill="url(#wallg)"/>`;
+[150,450,750,1050].forEach(x=>s+=`<polygon points="${x-24},8 ${x+24},8 ${x+130},360 ${x-130},360" fill="#fff" opacity=".035"/><rect x="${x-26}" y="0" width="52" height="8" rx="2" fill="#e8ecef"/>`);
+for(let x=0;x<1200;x+=100)s+=`<rect x="${x}" y="0" width="6" height="360" fill="#000" opacity=".12"/>`;
+s+=sign(140,110,'Wire section')+sign(345,110,'Press section')+sign(600,140,'Dryer section')+sign(870,90,'Calender')+sign(1010,90,'Reel');
+s+=`<rect y="360" width="1200" height="80" fill="url(#flg)"/><line x1="0" y1="374" x2="1200" y2="374" stroke="#ffc700" stroke-width="3" stroke-dasharray="26 18" opacity=".7"/>`;
+// headbox + wire
+s+=`<rect x="22" y="212" width="90" height="62" rx="6" fill="#46535b"/><rect x="22" y="212" width="90" height="6" rx="3" fill="#6b7880"/><rect x="50" y="274" width="12" height="86" fill="#3d474d"/><rect x="46" y="160" width="16" height="54" fill="#3d474d"/>`;
+s+=`<line x1="112" y1="252" x2="332" y2="252" stroke="#9bb4c4" stroke-width="4"/>`+[130,190,250,310].map(x=>roll(x,263,9,1.2,'#6b7880')).join('')+`<rect x="120" y="272" width="210" height="6" fill="#3d474d"/><rect x="140" y="278" width="10" height="82" fill="#3d474d"/><rect x="300" y="278" width="10" height="82" fill="#3d474d"/>`;
+// press
+s+=`<rect x="360" y="170" width="12" height="190" fill="#3d474d"/><rect x="428" y="170" width="12" height="190" fill="#3d474d"/>`+roll(400,215,34,3,'#7d8a91')+roll(400,285,34,3,'#6e7b82')+`<rect x="384" y="280" width="18" height="24" rx="3" fill="#59656c" stroke="#8d999f"/>`;
+// dryer hood + cans + steam
+s+=`<rect x="486" y="118" width="368" height="208" rx="10" fill="#2f3b43" stroke="#45535c"/>`+[560,700,800].map(x=>`<rect x="${x-10}" y="104" width="20" height="16" fill="#45535c"/>`+[0,1.3,2.6].map(b=>`<circle cx="${x}" cy="104" r="6" fill="#dfe6ea" opacity="0"><animate attributeName="cy" values="104;20" dur="4s" begin="${b}s" repeatCount="indefinite"/><animate attributeName="r" values="6;24" dur="4s" begin="${b}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".35;0" dur="4s" begin="${b}s" repeatCount="indefinite"/></circle>`).join('')).join('');
+s+=topC.map(x=>roll(x,180,26,2.4)).join('')+botC.map(x=>roll(x,275,24,2.2)).join('');
+s+=`<rect x="602" y="268" width="14" height="16" rx="3" fill="#59656c" stroke="#8d999f"/><rect x="520" y="326" width="10" height="34" fill="#3d474d"/><rect x="830" y="326" width="10" height="34" fill="#3d474d"/>`;
+// calender + reel
+s+=`<rect x="893" y="166" width="8" height="194" fill="#3d474d"/><rect x="929" y="166" width="8" height="194" fill="#3d474d"/>`+[200,234,268].map(y=>roll(915,y,16,1.4,'#a3adb3')).join('');
+s+=`<rect x="1020" y="200" width="10" height="160" fill="#3d474d"/><rect x="1090" y="200" width="10" height="120" fill="#3d474d"/><circle cx="1060" cy="230" r="30" fill="#f1ede4" stroke="#d6cfbf" stroke-width="2"><animate attributeName="r" values="30;66" dur="40s" repeatCount="indefinite"/></circle>`+roll(1060,230,10,2,'#59656c');
+// paper web
+s+=`<path d="${web}" fill="none" stroke="#f4f1ea" stroke-width="3.5"/><path d="${web}" fill="none" stroke="#c9c2b2" stroke-width="3.5" stroke-dasharray="6 22"><animate attributeName="stroke-dashoffset" from="0" to="-56" dur=".8s" repeatCount="indefinite"/></path>`;
+// floor equipment: vacuum pump, drive motor + gearbox, reel drive
+s+=`<rect x="196" y="350" width="120" height="10" fill="#3d474d"/><circle cx="238" cy="330" r="22" fill="#7a8a93"/><circle cx="238" cy="330" r="8" fill="#59656c"/><rect x="208" y="312" width="14" height="24" rx="3" fill="#59656c" stroke="#8d999f"/>`+motor(262,316,50,34);
+s+=`<rect x="694" y="352" width="156" height="8" fill="#3d474d"/>`+motor(700,318,60,34)+`<rect x="706" y="294" width="12" height="22" rx="4" fill="#e8ecef"/><rect x="708" y="300" width="8" height="13" rx="2" fill="#ffc700"><animate attributeName="height" values="13;4;13" dur="9s" repeatCount="indefinite"/><animate attributeName="y" values="300;309;300" dur="9s" repeatCount="indefinite"/></rect><rect x="760" y="331" width="22" height="8" fill="#9aa6ad"/><rect x="782" y="312" width="58" height="40" rx="6" fill="#e6b300"/><rect x="782" y="312" width="58" height="5" rx="2" fill="#ffd84a"/><circle cx="822" cy="332" r="6" fill="#111" opacity=".7"/><circle cx="822" cy="332" r="3" fill="#d9a400"/><rect x="838" y="342" width="8" height="8" rx="2" fill="#9aa6ad"/>`;
+s+=`<rect x="1040" y="352" width="126" height="8" fill="#3d474d"/><rect x="1046" y="322" width="16" height="30" rx="3" fill="#59656c"/><rect x="1062" y="333" width="44" height="8" fill="#9aa6ad"/>`+motor(1106,316,56,36)+`<rect x="1066" y="320" width="10" height="16" rx="2" fill="#e8ecef"/><rect x="1090" y="320" width="10" height="16" rx="2" fill="#e8ecef"/>`;
+stat.innerHTML=s;
+
+const stops=[
+ {n:"Vacuum pump",sub:"Vibration route",k:"v",x:182,f:1,t:[216,322],tool:"probe",ana:1,title:"Vibration route: vacuum pump",d:"Route-based data collection with the Emerson CSI 2140 on the pump's drive-end bearing, trended against previous readings."},
+ {n:"Press roll",sub:"Bearing analysis",k:"v",x:350,f:1,t:[392,292],tool:"probe",ana:1,fx:"spec",title:"Bearing analysis: press roll",d:"PeakVue and FFT spectrum analysis on a press roll bearing, looking for BPFO peaks and impacting before they become a failure."},
+ {n:"Dryer can",sub:"Ultrasound greasing",k:"l",x:570,f:1,t:[609,276],tool:"grease",phn:1,fx:"grease",title:"Ultrasound-assisted greasing: dryer can",d:"Greasing a dryer can bearing while listening with ultrasound, adding grease only until the friction signal drops. No over-greasing."},
+ {n:"Drive motor",sub:"Auto-lubricator",k:"l",x:668,f:1,t:[704,300],tool:"spl",fx:"spl",title:"Auto-lubricator change: drive motor",d:"Checking and replacing a single-point automatic lubricator on a motor bearing, one of 200+ I've commissioned."},
+ {n:"Dryer gearbox",sub:"Oil sampling",k:"l",x:874,f:-1,t:[846,346],tool:"bottle",fx:"drip",title:"Oil sampling: dryer section gearbox",d:"Drawing a clean, representative oil sample from the gearbox sample port for wear-metal, viscosity and contamination analysis."},
+ {n:"Reel drive",sub:"Laser alignment",k:"v",x:1028,f:1,t:[1070,328],tool:"tablet",fx:"laser",title:"Laser alignment: reel drive",d:"Laser-aligning the reel drive motor to its shaft to keep 2X vibration and coupling wear down."}
+];
+const KC={v:'#5aa2ff',l:'#ffc700'};
+const stopsEl=document.getElementById('stops');
+stopsEl.innerHTML=stops.map((p,i)=>`<button type="button" data-i="${i}" aria-pressed="false" style="--k:${KC[p.k]}"><span>${p.n}<small>${p.sub}</small></span></button>`).join('');
+const wk=document.getElementById('wk'),wkf=document.getElementById('wkf'),lf=document.getElementById('lgf'),lb=document.getElementById('lgb'),arm=document.getElementById('arm'),armr=document.getElementById('armr'),hand=document.getElementById('hand'),tool=document.getElementById('tool'),ana=document.getElementById('ana'),phn=document.getElementById('phn');
+const tkind=document.getElementById('tkind'),ttitle=document.getElementById('ttitle'),tdesc=document.getElementById('tdesc'),tourB=document.getElementById('tour');
+const TL={probe:14,grease:22,bottle:12,spl:4,tablet:2};
+let cur=0,wx=stops[0].x,face=1,arrived=false,touring=true,lastArr=0,armA=80,armD=26,vbX=0;
+const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ring=(x,y,c,n=3)=>Array.from({length:n},(_,i)=>`<circle cx="${x}" cy="${y}" r="4" fill="none" stroke="${c}" stroke-width="2.5"><animate attributeName="r" values="4;34" dur="1.5s" begin="${i*.5}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="1.5s" begin="${i*.5}s" repeatCount="indefinite"/></circle>`).join('');
+function fx(p){const [x,y]=p.t;let h='';
+  if(p.tool==='probe')h+=ring(x,y,'#5aa2ff');
+  if(p.fx==='spec'){const X=x-170,Y=y-175;h+=`<g><rect x="${X}" y="${Y}" width="150" height="92" rx="8" fill="#0a0e10" stroke="#5aa2ff" stroke-width="2"/><text x="${X+10}" y="${Y+18}" fill="#8f9ca3" font-size="13">PeakVue spectrum</text>`+Array.from({length:18},(_,i)=>{const pk=i===6||i===12,hh=pk?40:6+((i*7)%11);return `<rect x="${X+12+i*7.2}" y="${Y+82-hh}" width="4" height="${hh}" fill="${pk?'#e8251a':'#5aa2ff'}"><animate attributeName="height" values="${hh};${hh*.7};${hh}" dur="${.8+i%4*.2}s" repeatCount="indefinite"/><animate attributeName="y" values="${Y+82-hh};${Y+82-hh*.7};${Y+82-hh}" dur="${.8+i%4*.2}s" repeatCount="indefinite"/></rect>`}).join('')+`<text x="${X+55}" y="${Y+36}" fill="#fff" font-size="13" font-weight="600">BPFO</text><line x1="${X+150}" y1="${Y+70}" x2="${x-6}" y2="${y-8}" stroke="#5aa2ff" stroke-dasharray="3 4"/></g>`}
+  if(p.fx==='grease'){h+=`<ellipse cx="${x+2}" cy="${y}" rx="3" ry="2" fill="#ffc700"><animate attributeName="rx" values="2;6;2" dur=".9s" repeatCount="indefinite"/></ellipse>`;const hx=wx+face*-3,hy=262;h+=[0,.4,.8].map(b=>`<path d="M${hx-12} ${hy-8} q-8 8 0 16" fill="none" stroke="#ffc700" stroke-width="2"><animate attributeName="opacity" values="0;1;0" dur="1.2s" begin="${b}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 0;-10 0" dur="1.2s" begin="${b}s" repeatCount="indefinite"/></path>`).join('')+`<rect x="${x-60}" y="${y-70}" width="96" height="26" rx="6" fill="#0a0e10" stroke="#ffc700"/><text x="${x-12}" y="${y-52}" text-anchor="middle" fill="#ffc700" font-size="14" font-weight="600">dB ↓ 32 → 24</text>`}
+  if(p.fx==='spl')h+=`<g><circle cx="${x+8}" cy="${y-24}" r="11" fill="#2fb36b"/><path d="M${x+3} ${y-24}l4 4 7-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/></g>`;
+  if(p.fx==='drip')h+=[0,.5].map(b=>`<circle cx="${x-3}" cy="${y}" r="2.4" fill="#d9a400"><animate attributeName="cy" values="${y};${y+10}" dur="1s" begin="${b}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="1s" begin="${b}s" repeatCount="indefinite"/></circle>`).join('')+`<rect x="${x-180}" y="${y-110}" width="110" height="26" rx="6" fill="#0a0e10" stroke="#ffc700"/><text x="${x-125}" y="${y-92}" text-anchor="middle" fill="#ffc700" font-size="14" font-weight="600">Sample → lab</text>`;
+  if(p.fx==='laser')h+=`<line x1="1076" y1="327" x2="1090" y2="327" stroke="#ff2a2a" stroke-width="2.5" stroke-dasharray="3 2"><animate attributeName="stroke-dashoffset" from="0" to="-10" dur=".4s" repeatCount="indefinite"/></line><circle cx="1083" cy="327" r="10" fill="#ff2a2a" opacity=".15"><animate attributeName="opacity" values=".05;.3;.05" dur="1s" repeatCount="indefinite"/></circle><rect x="1074" y="278" width="122" height="26" rx="6" fill="#0a0e10" stroke="#5aa2ff"/><text x="1135" y="296" text-anchor="middle" fill="#5aa2ff" font-size="14" font-weight="600">Offset 0.02 mm ✓</text>`;
+  fxg.innerHTML=h}
+function setTool(p){tool.querySelectorAll('[data-t]').forEach(g=>g.setAttribute('display',g.dataset.t===p.tool?'inline':'none'));ana.setAttribute('display',p.ana?'inline':'none');phn.setAttribute('display',p.phn?'inline':'none')}
+function go(i,user){cur=i;arrived=false;fxg.innerHTML='';const p=stops[i];setTool(p);
+  stopsEl.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));
+  tkind.textContent=p.k==='l'?'Lubrication':'Vibration';tkind.style.background=KC[p.k];ttitle.textContent=p.title;tdesc.textContent=p.d;
+  if(user&&touring){touring=false;tourB.textContent='Resume tour';tourB.setAttribute('aria-pressed','true')}
+  if(rm){wx=p.x;arrive();pose(false,0)}}
+function arrive(){arrived=true;lastArr=performance.now();face=stops[cur].f;fx(stops[cur])}
+stopsEl.addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i,true)});
+tourB.addEventListener('click',()=>{touring=!touring;tourB.textContent=touring?'Pause tour':'Resume tour';tourB.setAttribute('aria-pressed',String(!touring));lastArr=performance.now()});
+let vis=true,lt=0;const vio=new IntersectionObserver(es=>{vis=es[0].isIntersecting});vio.observe(mill);
+function pose(walk,t){const p=stops[cur];
+  let ta=80,td=26;
+  if(!walk&&arrived){const lx=(p.t[0]-wx)*face,ly=p.t[1]-360,dx=lx-6,dy=ly+80,dist=Math.hypot(dx,dy);ta=Math.atan2(dy,dx)*180/Math.PI;td=Math.max(12,dist-TL[p.tool])}
+  const kk=rm?1:.15;armA+=(ta-armA)*kk;armD+=(td-armD)*kk;
+  arm.setAttribute('transform',`rotate(${armA.toFixed(1)} 6 -80)`);armr.setAttribute('width',armD.toFixed(1));hand.setAttribute('cx',(6+armD).toFixed(1));tool.setAttribute('transform',`translate(${(6+armD).toFixed(1)} -80)`);
+  const sw=walk?Math.sin(t/110)*24:0;lf.setAttribute('transform',`rotate(${sw.toFixed(1)} 0 -44)`);lb.setAttribute('transform',`rotate(${(-sw).toFixed(1)} 0 -44)`);
+  const bob=walk?Math.abs(Math.sin(t/110))*-2.5:0;
+  wk.setAttribute('transform',`translate(${wx.toFixed(1)} ${(360+bob).toFixed(1)})`);wkf.setAttribute('transform',`scale(${face} 1)`);
+  const W=mill.clientWidth;if(W<760){const tx=Math.max(0,Math.min(560,wx-320));vbX+=(tx-vbX)*.08;mill.setAttribute('viewBox',`${vbX.toFixed(1)} 0 640 440`)}else if(vbX!==0||mill.getAttribute('viewBox')!=='0 0 1200 440'){vbX=0;mill.setAttribute('viewBox','0 0 1200 440')}}
+function loop(t){requestAnimationFrame(loop);if(!vis)return;const dt=Math.min(50,t-(lt||t));lt=t;const p=stops[cur],dx=p.x-wx;
+  let walk=false;if(Math.abs(dx)>1.5){walk=true;face=dx>0?1:-1;wx+=Math.sign(dx)*Math.min(Math.abs(dx),dt*.17)}else if(!arrived){wx=p.x;arrive()}
+  if(arrived&&touring&&t-lastArr>5200)go((cur+1)%stops.length);
+  pose(walk,t)}
+go(0);
+if(rm){mill.pauseAnimations();pose(false,0);addEventListener('resize',()=>pose(false,0))}else requestAnimationFrame(loop);
+}
+
+/* ===== dividers ===== */
+{
+let d='';for(let x=0;x<=1400;x+=4){const ph=x%200;d+=(x?'L':'M')+x+' '+(20+5*Math.sin(x/200*Math.PI*4)+(ph<40?9*Math.exp(-ph/10)*Math.sin(ph*.9):0)).toFixed(1)}
+document.getElementById('dvw').setAttribute('d',d);
+document.getElementById('drips').innerHTML=[90,260,410,600,770,930,1100].map((x,i)=>`<ellipse cx="${x}" cy="10" rx="4" ry="3" fill="#d9a400"><animate attributeName="ry" values="2;6;2" dur="2.4s" begin="${i*.35}s" repeatCount="indefinite"/></ellipse><circle cx="${x}" cy="12" r="3.2" fill="#d9a400"><animate attributeName="cy" values="12;12;58" keyTimes="0;.55;1" dur="2.4s" begin="${i*.35}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.5;.9;1" dur="2.4s" begin="${i*.35}s" repeatCount="indefinite"/></circle>`).join('');
+}
+/* ===== lube room ===== */
+{
+const R=document.getElementById('lroom'),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const drum=(x,body,tag,shape,lab)=>{const sh=shape==='c'?`<circle cx="${x+37}" cy="268" r="13" fill="${tag}" stroke="#111"/>`:shape==='s'?`<rect x="${x+24}" y="255" width="26" height="26" fill="${tag}" stroke="#111"/>`:`<path d="M${x+37} 254 L${x+52} 281 L${x+22} 281Z" fill="${tag}" stroke="#111"/>`;
+  return `<rect x="${x}" y="220" width="74" height="110" rx="6" fill="${body}"/><ellipse cx="${x+37}" cy="221" rx="37" ry="7" fill="#ffffff22"/><line x1="${x}" y1="246" x2="${x+74}" y2="246" stroke="#00000044" stroke-width="3"/><line x1="${x}" y1="306" x2="${x+74}" y2="306" stroke="#00000044" stroke-width="3"/>${sh}<text x="${x+37}" y="298" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="Barlow,sans-serif">${lab}</text>`};
+document.getElementById('drums').innerHTML=drum(40,'#2f5e9e','#5aa2ff','s','VG 46')+drum(126,'#4a5560','#2fb36b','t','VG 68')+drum(212,'#6b4a2a','#ffc700','c','VG 220')+`<rect x="284" y="312" width="10" height="10" rx="2" fill="#9aa6ad"/>`;
+document.getElementById('guns').innerHTML=`<rect x="846" y="56" width="134" height="150" rx="8" fill="#34444f"/><text x="913" y="78" text-anchor="middle" fill="#c9d2d7" font-size="13" font-family="Barlow,sans-serif">Grease guns</text>`+[['#ffc700','EP2'],['#e8251a','Poly'],['#5aa2ff','HT']].map(([c,l],i)=>{const x=868+i*40;return `<g><rect x="${x-2}" y="86" width="16" height="8" rx="2" fill="${c}"/><rect x="${x}" y="94" width="12" height="64" rx="4" fill="#c9d2d7"/><line x1="${x+6}" y1="158" x2="${x+6}" y2="176" stroke="#9aa6ad" stroke-width="3"/><text x="${x+6}" y="196" text-anchor="middle" fill="#e8ecef" font-size="12" font-family="Barlow,sans-serif">${l}</text><animateTransform attributeName="transform" type="rotate" values="0 ${x+6} 86;${i%2?2:-2} ${x+6} 86;0 ${x+6} 86" dur="${3+i*.5}s" repeatCount="indefinite"/></g>`}).join('');
+const hin=document.getElementById('hin'),hout=document.getElementById('hout'),Lin=hin.getTotalLength(),Lout=hout.getTotalLength();
+const parts=document.getElementById('parts'),cap1=document.getElementById('cap1'),cap2=document.getElementById('cap2'),iso=document.getElementById('iso'),isobar=document.getElementById('isobar'),tick=document.getElementById('tick'),lvl=document.getElementById('lvl'),needle=document.getElementById('needle'),spent=document.getElementById('spent'),brtx=document.getElementById('brtx'),lrun=document.getElementById('lrun');
+let P=0,hold=0,run=!RM,vis=false,lt=0,acc=0,acc2=0,bt=0,pin=[],pout=[];
+const A=[21,19,16],B=[16,14,11];
+const setState=()=>{const e=P<.5?2*P*P:1-((-2*P+2)**2)/2;iso.textContent=A.map((a,i)=>Math.round(a+(B[i]-a)*e)).join('/');isobar.setAttribute('width',(168*P).toFixed(1));tick.setAttribute('opacity',P>=1?1:0);iso.setAttribute('fill',P>=1?'#2fb36b':'#ffc700');lvl.setAttribute('y',(296-16*P).toFixed(1))};
+const capDot=(g,x0)=>{if(g.childElementCount>110)return;g.insertAdjacentHTML('beforeend',`<circle cx="${(x0+2+Math.random()*24).toFixed(1)}" cy="${(216+Math.random()*80).toFixed(1)}" r="${(1+Math.random()*1.4).toFixed(1)}" fill="#3a2a14" opacity=".85"/>`)};
+const vio=new IntersectionObserver(es=>{vis=es[0].isIntersecting});vio.observe(R);
+lrun.addEventListener('click',()=>{run=!run;lrun.textContent=run?'Pause filtration':'Run filtration';lrun.setAttribute('aria-pressed',String(!run))});
+if(RM){lrun.textContent='Run filtration';P=.6;setState()}
+function step(t){requestAnimationFrame(step);if(!vis){lt=t;return}const dt=Math.min(60,t-(lt||t))/1000;lt=t;
+  bt=(bt+dt/30)%1;spent.setAttribute('height',(38*bt).toFixed(1));spent.setAttribute('y',(217-38*bt).toFixed(1));
+  brtx.textContent=bt<.35?'Dry: blue':bt<.8?'Absorbing moisture':'Spent: replace';brtx.setAttribute('fill',bt<.8?'#8fbfff':'#f472b6');
+  if(run){
+    if(P<1){P=Math.min(1,P+dt/16)}else{hold+=dt;if(hold>3.5){hold=0;P=0;cap1.innerHTML='';cap2.innerHTML=''}}
+    acc+=dt*16*(1-.8*P);while(acc>1){acc--;pin.push(0)}
+    acc2+=dt*3*(1-P);while(acc2>1){acc2--;pout.push(0)}
+    pin=pin.map(u=>u+dt/1.3).filter(u=>{if(u>=1){Math.random()<.7?capDot(cap1,463):capDot(cap2,508);return false}return true});
+    pout=pout.map(u=>u+dt/1.6).filter(u=>u<1);
+    setState()}
+  needle.setAttribute('transform',`rotate(${(-70+120*(.25+.45*P)+(run?Math.sin(t/90)*3:0)).toFixed(1)} 500 186)`);
+  let h='';pin.forEach(u=>{const q=hin.getPointAtLength(u*Lin);h+=`<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="1.9" fill="#e8ecef"/>`});
+  pout.forEach(u=>{const q=hout.getPointAtLength(u*Lout);h+=`<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="1.5" fill="#fff"/>`});parts.innerHTML=h}
+setState();requestAnimationFrame(step);
+const ls=document.getElementById('lscene');if(ls.scrollWidth>ls.clientWidth)ls.scrollLeft=(ls.scrollWidth-ls.clientWidth)*.45;
+if(RM)R.pauseAnimations();
+}
+/* ===== P-F curve ===== */
+{
+const S=document.getElementById('pfsvg'),rng=document.getElementById('pfr'),pk=document.getElementById('pfk'),pt=document.getElementById('pft'),pd=document.getElementById('pfd'),pl=document.getElementById('pfl');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MK=[{x:.05,n:'P: failure begins',k:'p',d:'A defect starts: a micro-crack, contamination, or a lubrication shortfall. Nothing is visible or audible yet.',l:'The whole warning window is still ahead'},
+ {x:.2,n:'Oil analysis',k:'l',d:'Wear metals, rising particle counts and changing viscosity show up in the oil sample first.',l:'Typical warning: months'},
+ {x:.32,n:'Ultrasound',k:'v',d:'High-frequency friction and early impacting can be heard with ultrasound, often while greasing.',l:'Typical warning: months'},
+ {x:.45,n:'Vibration analysis',k:'v',d:'Bearing defect frequencies and PeakVue impacts appear in the spectrum and waveform.',l:'Typical warning: weeks to months'},
+ {x:.66,n:'Heat',k:'f',d:'The bearing or oil runs hot. Damage is now well advanced.',l:'Typical warning: days to weeks'},
+ {x:.8,n:'Audible noise',k:'f',d:'Operators can hear it. Only an urgent repair is left.',l:'Typical warning: days'},
+ {x:.97,n:'F: functional failure',k:'f',d:'The machine stops: unplanned downtime, secondary damage and lost production.',l:'No warning left'}];
+const KC={p:'#8f9ca3',l:'#ffc700',v:'#5aa2ff',f:'#e8251a'},KN={p:'Start',l:'Lubrication',v:'Vibration & condition monitoring',f:'Late warning'};
+const c=x=>1-.12*x-.88*x**5;
+let G=null,u=0,act=-1,holdT=0;
+function build(){const W=S.clientWidth,H=S.clientHeight;if(!W||!H)return;const m={l:W<520?34:56,r:16,t:26,b:58},pw=W-m.l-m.r,ph=H-m.t-m.b;
+  const X=x=>m.l+x*pw,Y=v=>m.t+(1-v)*ph;G={X,Y,m,pw,ph,W,H};
+  let g=`<rect x="${X(.04)}" y="${m.t}" width="${X(.5)-X(.04)}" height="${ph}" fill="#ffc700" opacity=".13"/><text class="pl" x="${X(.06)}" y="${m.t+ph-10}">Where I work: early warning</text>`;
+  g+=`<line x1="${m.l}" y1="${m.t}" x2="${m.l}" y2="${m.t+ph}" stroke="currentColor" opacity=".3"/><line x1="${m.l}" y1="${m.t+ph}" x2="${W-m.r}" y2="${m.t+ph}" stroke="currentColor" opacity=".3"/>`;
+  g+=`<text transform="translate(${m.l-14} ${m.t+ph/2}) rotate(-90)" text-anchor="middle">Equipment condition</text><text x="${W-m.r}" y="${m.t+ph+20}" text-anchor="end">Time →</text>`;
+  [[.04,.5,'Months'],[.5,.75,'Weeks'],[.75,.98,'Days']].forEach(([a,b,t])=>g+=`<line x1="${X(a)+2}" y1="${m.t+ph+36}" x2="${X(b)-2}" y2="${m.t+ph+36}" stroke="currentColor" opacity=".35" stroke-width="2"/><text x="${(X(a)+X(b))/2}" y="${m.t+ph+52}" text-anchor="middle">${t}</text>`);
+  let d='';for(let i=0;i<=160;i++){const x=i/160;d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(c(x)).toFixed(1)}
+  g+=`<path d="${d}" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="3"/><path id="pfdone" fill="none" stroke="#ffc700" stroke-width="4" stroke-linecap="round"/>`;
+  MK.forEach((k,i)=>{const x=X(k.x),y=Y(c(k.x)),below=i%2===0,lx=Math.min(W-m.r-4,Math.max(m.l+4,x));
+    const anchor=x>W-110?'end':x<m.l+60?'start':'middle';
+    g+=`<g class="mk" data-i="${i}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="14" fill="transparent"/><circle class="dot" cx="${x}" cy="${y}" r="7" fill="${KC[k.k]}" stroke="var(--bg)" stroke-width="3"/>${W<520?'':`<text class="pl" x="${lx}" y="${below?y+26:y-14}" text-anchor="${anchor}">${k.n.replace(/:.*/,'')}</text>`}</g>`});
+  g+=`<circle id="pfdot" r="9" fill="#fff" stroke="#111" stroke-width="3"/>`;
+  S.innerHTML=g;S.style.color='var(--ink)';
+  S.querySelectorAll('.mk').forEach(e=>e.addEventListener('click',()=>{u=MK[+e.dataset.i].x+.001;holdT=performance.now()+7000;upd()}));upd()}
+function upd(){if(!G)return;const {X,Y}=G;let d='';const n=Math.max(2,Math.round(u*160));for(let i=0;i<=n;i++){const x=Math.min(u,i/160);d+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(c(x)).toFixed(1)}
+  S.querySelector('#pfdone').setAttribute('d',d);const dot=S.querySelector('#pfdot');dot.setAttribute('cx',X(u).toFixed(1));dot.setAttribute('cy',Y(c(u)).toFixed(1));
+  let a=0;MK.forEach((k,i)=>{if(u>=k.x)a=i});
+  S.querySelectorAll('.mk .dot').forEach((e,i)=>e.setAttribute('r',i===a?10:i<a?7:6));
+  rng.value=Math.round(u*1000);
+  if(a!==act){act=a;const k=MK[a];pk.textContent=KN[k.k];pk.style.background=KC[k.k];pt.textContent=k.n;pd.textContent=k.d;pl.textContent=k.l}}
+rng.addEventListener('input',()=>{u=rng.value/1000;holdT=performance.now()+7000;upd()});
+const ro=new ResizeObserver(build);ro.observe(S);
+let vis=false;new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(S);
+let lt=0,pause=0;
+function tickf(t){requestAnimationFrame(tickf);const dt=Math.min(60,t-(lt||t))/1000;lt=t;if(!vis||t<holdT)return;
+  if(u>=1){pause+=dt;if(pause>2.5){pause=0;u=0}}else u=Math.min(1,u+dt/14);upd()}
+if(RM){u=.45}else requestAnimationFrame(tickf);
+}
+
+/* ===== motion layer ===== */
+// ticker
+const tk1=["Vibration analysis","ICML MLE","PeakVue","Emerson CSI 2140","Oil analysis","Contamination control","Root cause analysis","Shutdown planning"],tk2=["Predictive maintenance","Auto-lubrication","Laser alignment","Bearing diagnostics","Grease management","Condition monitoring","Reliability engineering","SAP · IFS · ECAM"];
+const row=a=>{const s=`<span>${a.map(x=>`${x}<i></i>`).join('')}</span>`;return s+s};
+document.getElementById('tk1').innerHTML=row(tk1);document.getElementById('tk2').innerHTML=row(tk2);
+
+// split name into letters
+const h1=document.querySelector('.hero h1');
+if(!reduce){let d=0;h1.setAttribute('aria-label',h1.textContent);h1.innerHTML=h1.textContent.split(' ').map(w=>`<span class="w" aria-hidden="true">${[...w].map(c=>`<span class="ch" style="--d:${d++}">${c}</span>`).join('')}</span>`).join(' ');document.querySelector('.hero').classList.add('anim');h1.querySelectorAll('.ch').forEach(c=>c.addEventListener('animationend',()=>c.classList.add('done'),{once:true}))}
+
+// scroll progress + timeline fill
+const prog=document.getElementById('prog'),tlEl=document.getElementById('tl'),jobsEls=[...tlEl.querySelectorAll('.job')];
+let tq=false;
+const onScroll=()=>{tq=false;const h=document.documentElement,max=h.scrollHeight-innerHeight;prog.style.transform=`scaleX(${max>0?scrollY/max:0})`;
+  const r=tlEl.getBoundingClientRect(),mid=innerHeight*.6,p=Math.max(0,Math.min(1,(mid-r.top)/r.height));tlEl.style.setProperty('--p',(p*100).toFixed(1)+'%');
+  jobsEls.forEach(j=>j.classList.toggle('lit',j.getBoundingClientRect().top+22<mid))};
+addEventListener('scroll',()=>{if(!tq){tq=true;requestAnimationFrame(onScroll)}},{passive:true});addEventListener('resize',onScroll);onScroll();
+
+if(!reduce){
+  // reveal on scroll (only for things below the fold, so nothing at load is hidden)
+  const groups=[['section h2'],['.wins li'],['.job'],['.sk>div'],['.chip'],['.tag'],['.edu .box'],['.shot'],['.cl>*'],['.stat']];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const el=e.target._rv||e.target;el.classList.add('in');io.unobserve(e.target);setTimeout(()=>el.classList.remove('rv','in'),1400)}}),{threshold:.12});
+  groups.forEach(([sel])=>{const els=[...document.querySelectorAll(sel)];els.forEach(el=>{if(el.getBoundingClientRect().top>innerHeight*.95){const sib=[...el.parentElement.children].indexOf(el);el.style.setProperty('--i',Math.min(sib,10));el.classList.add('rv');if(el.tagName==='H2'){el.parentElement._rv=el;io.observe(el.parentElement)}else io.observe(el)}})});
+
+  // vibration-trace background in hero
+  const cv=document.getElementById('waves'),cx=cv.getContext('2d'),hero=document.querySelector('.hero');
+  let W=0,H=0,mx=-999,my=-999,run=true,ink='#000',dpr=1;
+  const size=()=>{dpr=Math.min(2,devicePixelRatio||1);W=hero.clientWidth;H=hero.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);ink=getComputedStyle(document.body).color};
+  const ro2=new ResizeObserver(size);ro2.observe(hero);
+  hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});
+  hero.addEventListener('mouseleave',()=>{mx=my=-999});
+  const vis=new IntersectionObserver(es=>{run=es[0].isIntersecting});vis.observe(hero);
+  const N=9;let tt=0;
+  const wave=ts=>{requestAnimationFrame(wave);if(!run||!W)return;tt=ts/1000;cx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){const y0=H*(.08+i*.105),hot=i===4;cx.beginPath();
+      for(let x=0;x<=W;x+=6){const g=Math.exp(-(((x-mx)**2)/(2*150**2))-(((y0-my)**2)/(2*120**2)));
+        const imp=hot?Math.exp(-(((x-((tt*220)%(W+400)-200))**2)/800))*18*Math.sin(x*.5):0;
+        const y=y0+Math.sin(x*.012+tt*(1+i*.15)+i)*(5+i*.6)+Math.sin(x*.05-tt*3+i)*2+g*34*Math.sin(x*.09-tt*9)+imp;
+        x?cx.lineTo(x,y):cx.moveTo(x,y)}
+      cx.strokeStyle=hot?'rgba(255,199,0,.55)':ink;cx.globalAlpha=hot?1:.07;cx.lineWidth=hot?2:1.2;cx.stroke();cx.globalAlpha=1}};
+  requestAnimationFrame(wave);
+
+  // magnetic buttons, card tilt, spotlight
+  if(fine){
+    document.querySelectorAll('.btn').forEach(b=>{b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`});b.addEventListener('mouseleave',()=>b.style.transform='')});
+    document.querySelectorAll('.box,.wins li').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(700px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-3px)`});c.addEventListener('mouseleave',()=>c.style.transform='')});
+    document.querySelectorAll('.floor,.contact').forEach(s=>s.addEventListener('mousemove',e=>{const r=s.getBoundingClientRect();s.style.setProperty('--mx',(e.clientX-r.left)+'px');s.style.setProperty('--my',(e.clientY-r.top)+'px')}));
+  }
+}
+}
+</script>
+<script>
+/* ===== SMELTER SCENE ===== */
+{
+const S=document.getElementById('smsvg'),st=document.getElementById('smStatic'),ptmG=document.getElementById('ptm'),spG=document.getElementById('sparks'),hotG=document.getElementById('hots');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NP=6,X0=24,PITCH=158,PW=126,potC=i=>X0+i*PITCH+PW/2;
+const motor=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#2f5e9e"/>${Array.from({length:Math.floor(w/8)},(_,i)=>`<rect x="${x+4+i*8}" y="${y}" width="3.5" height="${h}" fill="#244c88"/>`).join('')}`;
+let s=`<defs><linearGradient id="smw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#211c19"/><stop offset="1" stop-color="#3a2d25"/></linearGradient><linearGradient id="crust" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf5a"/><stop offset="1" stop-color="#ff5a1a"/></linearGradient><radialGradient id="glow"><stop offset="0" stop-color="#ff8a2a" stop-opacity=".45"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="372" fill="url(#smw)"/>`;
+for(let x=0;x<=1200;x+=120)s+=`<path d="M${x} 0 L${x+60} 46 L${x+120} 0" fill="none" stroke="#4a3d33" stroke-width="3"/>`;
+s+=`<rect x="0" y="44" width="1200" height="5" fill="#4a3d33"/>`;
+for(let x=60;x<1200;x+=200)s+=`<rect x="${x}" y="84" width="10" height="288" fill="#2c2420"/>`;
+s+=`<rect x="0" y="76" width="1200" height="8" fill="#6b7378"/>`;
+s+=`<rect x="520" y="50" width="190" height="24" rx="3" fill="#123a6b" stroke="#8fa6bb"/><text x="615" y="67" text-anchor="middle" fill="#fff" font-size="15" font-weight="600">Potline: reduction cells</text><rect x="990" y="104" width="150" height="30" rx="3" fill="#123a6b" stroke="#8fa6bb"/><text x="1065" y="125" text-anchor="middle" fill="#fff" font-size="17" font-weight="600">Fume treatment</text>`;
+s+=`<rect x="14" y="176" width="1010" height="18" rx="4" fill="#4b555b"/><path d="M1024 185 H1046 V250" fill="none" stroke="#4b555b" stroke-width="18"/>`;
+for(let i=0;i<NP;i++){const x=X0+i*PITCH,c=potC(i);
+  s+=`<rect x="${c-6}" y="194" width="12" height="38" fill="#4b555b"/><ellipse cx="${c}" cy="300" rx="${PW*.7}" ry="40" fill="url(#glow)"/>`;
+  s+=`<rect x="${x}" y="298" width="${PW}" height="64" rx="4" fill="#3a3f44"/>`+[18,48,78,108].map(o=>`<rect x="${x+o}" y="298" width="6" height="64" fill="#2b2f33"/>`).join('');
+  s+=`<rect x="${x+6}" y="286" width="${PW-12}" height="14" rx="3" fill="url(#crust)"><animate attributeName="opacity" values="1;.82;1;.9;1" dur="${2+i*.3}s" repeatCount="indefinite"/></rect>`;
+  s+=[22,48,78,104].map(o=>`<rect x="${x+o-8}" y="280" width="16" height="14" fill="#1d1d1f"/><line x1="${x+o}" y1="242" x2="${x+o}" y2="280" stroke="#c9d2d7" stroke-width="4"/>`).join('');
+  s+=`<rect x="${x+8}" y="232" width="${PW-16}" height="10" rx="2" fill="#8a949a"/><path d="M${x} 298 L${x+10} 250 M${x+PW} 298 L${x+PW-10} 250" stroke="#59636a" stroke-width="6"/>`;
+  s+=`<rect x="${x+PW-4}" y="300" width="14" height="62" fill="#b8733a"/>`}
+s+=`<rect x="14" y="362" width="990" height="10" fill="#b8733a"/><rect x="14" y="362" width="990" height="3" fill="#d89458"/>`;
+s+=`<rect y="372" width="1200" height="68" fill="#241e1a"/><line x1="0" y1="386" x2="1200" y2="386" stroke="#ffc700" stroke-width="3" stroke-dasharray="24 16" opacity=".55"/>`;
+// tapping crucible at pot 1
+const tc=potC(1);s+=`<path d="M${tc+20} 292 C ${tc+60} 300, ${tc+70} 360, ${tc+76} 394" fill="none" stroke="#777" stroke-width="6"/><path d="M${tc+20} 292 C ${tc+60} 300, ${tc+70} 360, ${tc+76} 394" fill="none" stroke="#ffb02e" stroke-width="2.5" stroke-dasharray="5 7"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur=".5s" repeatCount="indefinite"/></path><path d="M${tc+46} 392 h64 l-8 40 h-48z" fill="#4a4f54"/><ellipse cx="${tc+78}" cy="393" rx="32" ry="5" fill="#ff8a2a"><animate attributeName="fill" values="#ff8a2a;#ffb84a;#ff8a2a" dur="1.4s" repeatCount="indefinite"/></ellipse><text x="${tc+78}" y="426" text-anchor="middle" fill="#c9d2d7" font-size="12">Tapping</text>`;
+// fume fan + stack
+s+=`<rect x="1004" y="350" width="180" height="22" fill="#3d474d"/><circle cx="1060" cy="300" r="50" fill="#6b7880"/><circle cx="1060" cy="300" r="40" fill="#46535b"/><g><animateTransform attributeName="transform" type="rotate" from="0 1060 300" to="360 1060 300" dur="${RM?0:.9}s" repeatCount="indefinite"/>${Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return `<line x1="1060" y1="300" x2="${(1060+36*Math.cos(a)).toFixed(1)}" y2="${(300+36*Math.sin(a)).toFixed(1)}" stroke="#c9d2d7" stroke-width="5"/>`}).join('')}</g><circle cx="1060" cy="300" r="8" fill="#2a3338"/><rect x="1110" y="296" width="20" height="8" fill="#9aa6ad"/><rect x="1098" y="290" width="14" height="20" rx="3" fill="#59656c"/>`+motor(1128,282,46,36);
+s+=`<rect x="1170" y="40" width="26" height="232" fill="#59656c"/><rect x="1166" y="40" width="34" height="8" fill="#6b7880"/>`+[0,1.5,3].map(b=>`<circle cx="1183" cy="38" r="6" fill="#d9d4cf" opacity="0"><animate attributeName="cy" values="38;-10" dur="4.5s" begin="${b}s" repeatCount="indefinite"/><animate attributeName="r" values="6;26" dur="4.5s" begin="${b}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".4;0" dur="4.5s" begin="${b}s" repeatCount="indefinite"/></circle>`).join('');
+// floor: cooling pump + compressor
+s+=`<rect x="560" y="420" width="100" height="10" fill="#3d474d"/><circle cx="582" cy="406" r="15" fill="#7a8a93"/><circle cx="582" cy="406" r="5" fill="#46535b"/><rect x="598" y="404" width="10" height="5" fill="#9aa6ad"/>`+motor(608,392,48,28)+`<text x="610" y="438" text-anchor="middle" fill="#c9d2d7" font-size="12">Cooling water pump</text>`;
+s+=`<rect x="760" y="388" width="110" height="40" rx="6" fill="#46535b"/><circle cx="790" cy="408" r="13" fill="#2a3338"/>${Array.from({length:6},(_,i)=>`<line x1="790" y1="408" x2="${(790+11*Math.cos(i)).toFixed(1)}" y2="${(408+11*Math.sin(i)).toFixed(1)}" stroke="#6b7880" stroke-width="2"/>`).join('')}<rect x="818" y="396" width="40" height="10" rx="2" fill="#2fb36b" opacity=".8"/><circle cx="846" cy="418" r="5" fill="#d9a400"/><text x="815" y="438" text-anchor="middle" fill="#c9d2d7" font-size="12">Air compressor</text>`;
+st.innerHTML=s;
+const pts=[
+ {n:"PTM long-travel drive",sub:"Vibration",k:"v",dyn:[-66,72],title:"Pot tending machine: long-travel gearbox",d:"The PTM's motors and gearboxes run in heat, dust and fluoride fumes. Route vibration readings and gear-mesh trending catch tooth wear and bearing damage before the machine stops the potline."},
+ {n:"PTM hydraulic pack",sub:"Oil analysis",k:"l",dyn:[42,74],title:"Pot tending machine: hydraulic power pack",d:"Fine alumina dust is the enemy of valves and cylinders. Regular oil sampling, sealed breathers and kidney-loop filtration keep the hydraulic oil at its cleanliness target."},
+ {n:"Fume treatment fan",sub:"Vibration",k:"v",at:[1105,300],title:"Fume treatment centre: induced-draft fan",d:"These fans keep the pot hoods under suction. Dust build-up on the impeller throws it out of balance, which shows as a rising 1X peak long before the bearings suffer."},
+ {n:"Cooling water pump",sub:"Vibration",k:"v",at:[582,406],title:"Cooling water pump",d:"Checked on route for bearing defects, misalignment and cavitation, so a pump problem never becomes a cooling problem."},
+ {n:"Air compressor",sub:"Oil analysis",k:"l",at:[846,418],title:"Air compressor: alumina conveying",d:"Compressor oil analysis tracks oxidation, varnish risk and wear metals, so oil changes are based on condition rather than the calendar."}];
+const KC={v:'#5aa2ff',l:'#ffc700'};
+const stopsEl=document.getElementById('smstops'),smk=document.getElementById('smk'),smt=document.getElementById('smt'),smd=document.getElementById('smd'),tourB=document.getElementById('smtour');
+stopsEl.innerHTML=pts.map((p,i)=>`<button type="button" data-i="${i}" aria-pressed="false" style="--k:${KC[p.k]}"><span>${p.n}<small>${p.sub}</small></span></button>`).join('');
+hotG.innerHTML=pts.map((p,i)=>`<g class="hot" data-i="${i}"><circle r="20" fill="transparent"/><circle class="hr" r="6" fill="none" stroke="${KC[p.k]}" stroke-width="3"><animate attributeName="r" values="6;22" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="1.6s" repeatCount="indefinite"/></circle><circle class="hc" r="6" fill="${KC[p.k]}" stroke="#111" stroke-width="2"/></g>`).join('');
+const hots=[...hotG.querySelectorAll('.hot')];
+let cur=0,touring=true,lastSw=0;
+function sel(i,user){cur=i;const p=pts[i];stopsEl.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));smk.textContent=p.k==='l'?'Lubrication':'Vibration';smk.style.background=KC[p.k];smt.textContent=p.title;smd.textContent=p.d;hots.forEach((h,j)=>h.querySelector('.hc').setAttribute('r',j===i?10:6));lastSw=performance.now();
+  if(user&&touring){touring=false;tourB.textContent='Resume tour';tourB.setAttribute('aria-pressed','true')}}
+stopsEl.addEventListener('click',e=>{const b=e.target.closest('button');if(b)sel(+b.dataset.i,true)});
+hotG.addEventListener('click',e=>{const h=e.target.closest('.hot');if(h)sel(+h.dataset.i,true)});
+tourB.addEventListener('click',()=>{touring=!touring;tourB.textContent=touring?'Pause tour':'Resume tour';tourB.setAttribute('aria-pressed',String(!touring));lastSw=performance.now()});
+// PTM
+let px=potC(0),tgt=0,phase='move',L=40,timer=0,sparks=[],vis=false,lt=0,vbX=0;
+function drawPTM(){const bx=px-30;
+  ptmG.innerHTML=`<rect x="${px-86}" y="84" width="172" height="46" rx="4" fill="#e6b300"/><rect x="${px-86}" y="84" width="172" height="6" fill="#ffd84a"/>${[-60,-20,20,60].map(o=>`<rect x="${px+o-2}" y="90" width="4" height="40" fill="#b88f00"/>`).join('')}<circle cx="${px-72}" cy="80" r="6" fill="#222"/><circle cx="${px+72}" cy="80" r="6" fill="#222"/>
+  <rect x="${px-78}" y="62" width="24" height="18" rx="2" fill="#59656c"/>${motor(px-104,64,24,14)}<rect x="${px+22}" y="62" width="40" height="20" rx="3" fill="#3d474d"/><rect x="${px+28}" y="56" width="8" height="7" fill="#e8251a"/>
+  <rect x="${px+44}" y="130" width="36" height="30" rx="3" fill="#2a3338"/><rect x="${px+48}" y="134" width="28" height="16" rx="2" fill="#7fc4ff" opacity=".6"/>
+  <rect x="${bx}" y="130" width="12" height="${L}" fill="#9aa6ad"/><path d="M${bx-2} ${130+L} h16 l-8 14z" fill="#c9d2d7"/>
+  <rect x="${px+4}" y="130" width="14" height="60" fill="#9aa6ad"/><path d="M${px} 190 h22 v8 l-4 10 M${px} 198 l4 10" fill="none" stroke="#c9d2d7" stroke-width="4"/>`;
+  hots.forEach((h,i)=>{const p=pts[i];const [x,y]=p.dyn?[px+p.dyn[0],p.dyn[1]]:p.at;h.setAttribute('transform',`translate(${x} ${y})`)})}
+function loop(t){requestAnimationFrame(loop);const dt=Math.min(50,t-(lt||t))/1000;lt=t;if(!vis)return;
+  const goal=potC(tgt)+30;
+  if(phase==='move'){const d=goal-px;if(Math.abs(d)<1){px=goal;phase='down'}else px+=Math.sign(d)*Math.min(Math.abs(d),dt*150)}
+  else if(phase==='down'){L=Math.min(150,L+dt*220);if(L>=150){phase='hit';timer=0}}
+  else if(phase==='hit'){timer+=dt;if(Math.random()<.6)for(let k=0;k<3;k++)sparks.push({x:px-24,y:286,vx:(Math.random()-.5)*180,vy:-60-Math.random()*140,l:1});L=150+Math.sin(timer*40)*4;if(timer>1.1)phase='up'}
+  else if(phase==='up'){L=Math.max(40,L-dt*200);if(L<=40){phase='move';tgt=(tgt+1)%NP}}
+  sparks=sparks.filter(p=>(p.l-=dt*1.6)>0);sparks.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=380*dt});
+  spG.innerHTML=sparks.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2" fill="#ffd27a" opacity="${p.l.toFixed(2)}"/>`).join('');
+  drawPTM();
+  if(touring&&t-lastSw>4800)sel((cur+1)%pts.length);
+  const W=S.clientWidth;if(W<760){const p=pts[cur],fx=p.dyn?px+p.dyn[0]:p.at[0],tx=Math.max(0,Math.min(560,fx-320));vbX+=(tx-vbX)*.06;S.setAttribute('viewBox',`${vbX.toFixed(1)} 0 640 440`)}else if(S.getAttribute('viewBox')!=='0 0 1200 440')S.setAttribute('viewBox','0 0 1200 440')}
+new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(S);
+sel(0);drawPTM();
+if(RM){S.pauseAnimations()}else requestAnimationFrame(loop);
+}
+
+/* ===== CALCULATORS: access + routing ===== */
+{
+const view=document.getElementById('calcview'),home=document.getElementById('home');
+const st={mode:null,user:null,signup:'open'};
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function check(){try{const r=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});const ct=r.headers.get('content-type')||'';if(ct.includes('application/json')){const j=await r.json();st.mode='server';st.user=j.user||null;st.signup=j.signup||'open';return}}catch(e){}st.mode='preview'}
+let loading=null;
+function loadModule(){if(window.HSCalc)return Promise.resolve();if(loading)return loading;loading=new Promise((res,rej)=>{const s=document.createElement('script');s.src=st.mode==='server'?'/app/calculators.js':'calculators.js';s.onload=res;s.onerror=()=>{loading=null;rej()};document.body.appendChild(s)});return loading}
+const NAMES={v:['Bearing defect frequencies','Fmax, lines and resolution','Fmax from shaft speed','Vibration units conversion','ISO 10816-3 severity','Forcing frequencies'],l:['Bearing grease quantity','Relubrication interval','Oil viscosity and kappa','ISO 4406 cleanliness code','Filter beta ratio','Auto-lubricator setting','Lubrication unit conversions']};
+function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
+  view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>Calculators</h1><p>Sign in to use 13 engineering calculators for vibration analysis and machinery lubrication. Results update as you type, and every calculator shows its formula.</p></div></div>
+  <div class="band"><div class="wrap auth">
+   <div class="authbox">
+    <div class="atabs" role="tablist"><button type="button" role="tab" data-t="login" aria-selected="${tab==='login'}">Log in</button>${canSign?`<button type="button" role="tab" data-t="signup" aria-selected="${tab==='signup'}">Create account</button>`:''}</div>
+    <form id="af" novalidate>
+     ${tab==='signup'?`<div class="cfield"><label for="a-name">Name</label><input id="a-name" autocomplete="name" required maxlength="80"></div>`:''}
+     <div class="cfield"><label for="a-email">Email</label><input id="a-email" type="email" autocomplete="email" required maxlength="160"></div>
+     <div class="cfield"><label for="a-pass">Password</label><input id="a-pass" type="password" autocomplete="${tab==='signup'?'new-password':'current-password'}" required minlength="8" maxlength="200">${tab==='signup'?'<small>At least 8 characters.</small>':''}</div>
+     ${tab==='signup'&&st.signup==='code'?`<div class="cfield"><label for="a-code">Access code</label><input id="a-code" autocomplete="off" required maxlength="80"><small>Ask Hariharan for a code.</small></div>`:''}
+     <p class="aerr" id="aerr" role="alert"></p>
+     <button class="btn solid" type="submit" id="asub">${tab==='signup'?'Create account':'Log in'}</button>
+     ${!canSign&&tab==='login'?'<p class="cnote">New accounts are by invitation. Contact Hariharan for access.</p>':''}
+    </form>
+   </div>
+   <div class="authinfo"><h3>What's inside</h3>${['v','l'].map(k=>`<p class="ahd"><i class="kd ${k}"></i>${k==='v'?'Vibration':'Lubrication'}</p><ul>${NAMES[k].map(n=>`<li>${n}</li>`).join('')}</ul>`).join('')}</div>
+  </div></div>`;
+  view.querySelectorAll('.atabs button').forEach(b=>b.addEventListener('click',()=>gate(h,b.dataset.t)));
+  const form=document.getElementById('af'),err=document.getElementById('aerr'),sub=document.getElementById('asub');
+  form.addEventListener('submit',async e=>{e.preventDefault();err.textContent='';const v=id=>(document.getElementById(id)||{}).value||'';
+    const body={email:v('a-email').trim(),password:v('a-pass')};if(tab==='signup'){body.name=v('a-name').trim();body.code=v('a-code').trim()}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)){err.textContent='Enter a valid email address.';return}
+    if(body.password.length<8){err.textContent='Password must be at least 8 characters.';return}
+    if(tab==='signup'&&!body.name){err.textContent='Enter your name.';return}
+    sub.disabled=true;sub.textContent='Please wait…';
+    try{const r=await fetch('/api/'+(tab==='signup'?'signup':'login'),{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));
+      if(!r.ok){err.textContent=j.error||'Something went wrong. Please try again.';sub.disabled=false;sub.textContent=tab==='signup'?'Create account':'Log in';return}
+      st.user=j.user;show(h)}catch(ex){err.textContent='Could not reach the server. Check your connection.';sub.disabled=false;sub.textContent=tab==='signup'?'Create account':'Log in'}});
+  document.getElementById('a-email').focus({preventScroll:true});document.title='Sign in · Calculators · Hariharan Singaram'}
+function bar(){const head=view.querySelector('.cv-head .wrap');if(!head)return;const d=document.createElement('div');d.className='acct';
+  d.innerHTML=st.mode==='preview'?'<span>Preview mode: on harising.cloud visitors sign in first.</span>':`<span>Signed in as <b>${esc(st.user.name||st.user.email)}</b></span><button type="button" class="btn" id="alog">Log out</button>`;head.prepend(d);
+  const lo=document.getElementById('alog');if(lo)lo.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:'{}'})}catch(e){}st.user=null;gate(location.hash.slice(1))})}
+async function show(h){if(st.mode===null){view.innerHTML='<div class="band"><div class="wrap"><p class="cnote">Loading…</p></div></div>';await check()}
+  if(st.mode==='server'&&!st.user)return gate(h);
+  try{await loadModule()}catch(e){view.innerHTML='<div class="band"><div class="wrap"><p class="aerr">The calculators could not load. Refresh the page to try again.</p></div></div>';return}
+  window.HSCalc.show(h);bar()}
+function route(){const h=decodeURIComponent(location.hash.slice(1)),isC=h==='calculators'||h==='calc-vib'||h==='calc-lube'||h.startsWith('c-');
+  home.hidden=isC;view.hidden=!isC;
+  if(isC){show(h);scrollTo({top:0,behavior:'instant'});document.activeElement?.blur()}
+  else{document.title='Hariharan Singaram';if(h){const el=document.getElementById(h);if(el)requestAnimationFrame(()=>el.scrollIntoView())}}}
+addEventListener('hashchange',route);route();
+}
+</script>
+
+</body>
+</html>
