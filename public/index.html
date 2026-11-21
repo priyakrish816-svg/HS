@@ -635,7 +635,7 @@ h2.rv.in{clip-path:inset(-10% -2% -10% 0)}
     <p>I'm open to conversations about lubrication programs, condition monitoring, reliability improvement and shutdown support. Email is the quickest way to reach me.</p>
   </div>
   <div class="cl">
-    <div><span class="k">Email</span><a href="mailto:skh8039@gmail.com" style="padding:0;border:0;background:none;min-height:0">skh8039@gmail.com</a><button type="button" id="copy">Copy</button></div>
+    <div><span class="k">Email</span><a href="mailto:ozharising@gmail.com" style="padding:0;border:0;background:none;min-height:0">ozharising@gmail.com</a><button type="button" id="copy">Copy</button></div>
     <a href="https://www.linkedin.com/in/harising" target="_blank" rel="noopener"><span class="k">LinkedIn</span>linkedin.com/in/harising</a>
     <a href="https://harising.cloud" target="_blank" rel="noopener"><span class="k">Portfolio</span>harising.cloud</a>
     <div><span class="k">Location</span>Greater Sydney, NSW, Australia</div>
@@ -676,7 +676,7 @@ const certs=[["Machinery Lubrication Engineer (MLE)","ICML","#ffc700"],["Machine
 document.getElementById('tags').innerHTML=certs.map(([a,b,c])=>`<div class="tag" style="--c:${c}"><b>${a}</b><small>${b}</small></div>`).join('');
 
 const cp=document.getElementById('copy');
-cp.addEventListener('click',()=>{navigator.clipboard.writeText('skh8039@gmail.com').then(()=>{cp.textContent='Copied';setTimeout(()=>cp.textContent='Copy',1600)}).catch(()=>{cp.textContent='Select it';})});
+cp.addEventListener('click',()=>{navigator.clipboard.writeText('ozharising@gmail.com').then(()=>{cp.textContent='Copied';setTimeout(()=>cp.textContent='Copy',1600)}).catch(()=>{cp.textContent='Select it';})});
 
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(!reduce){const cio=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;cio.unobserve(en.target);const el=en.target,n=+el.dataset.n,s=el.dataset.s;let t0=null;const step=ts=>{t0??=ts;const p=Math.min(1,(ts-t0)/1600),e=1-(1-p)**3;el.textContent=Math.round(n*e)+s;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.5});document.querySelectorAll('.stat b').forEach(el=>cio.observe(el))}
