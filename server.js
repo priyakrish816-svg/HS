@@ -8,6 +8,9 @@
  *   SESSION_SECRET  long random string used to sign login cookies (REQUIRED in production)
  *   SIGNUP          open | code | closed   (default closed: admin only)
  *   ADMIN_EMAIL     admin account created on first start (default ozharising@gmail.com)
+ *   ADMIN_PASSWORD_HASH  admin password, applied on every start so redeploys never lose it.
+ *                   Create it with: node server.js hash 'YourPassword'   (recommended)
+ *   ADMIN_PASSWORD  same, as plain text (simpler, but the password sits in Coolify's settings)
  *   PUBLIC_URL      site address used in reset emails (default https://<host of the request>)
  *   SMTP_HOST       mail server for password-reset emails (default smtp.gmail.com)
  *   SMTP_PORT       465 (TLS) by default
@@ -24,6 +27,7 @@
  *   node server.js reset <email> <pass>  set a new password
  *   node server.js add <email> [name]    add a member (prints a link to set their password)
  *   node server.js reset-link <email>    print a password-reset link (works without email set up)
+ *   node server.js hash <password>       print a value for the ADMIN_PASSWORD_HASH setting
  */
 'use strict';
 const http = require('http');
@@ -125,13 +129,28 @@ function sendMail({ to, subject, text }) {
 }
 
 /* ---------- admin account ---------- */
-function ensureAdmin() {
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_PASSWORD_HASH = (process.env.ADMIN_PASSWORD_HASH || '').trim(); // "salt:hash"
+async function ensureAdmin() {
   if (!ADMIN_EMAIL) return;
   const db = loadUsers();
-  if (db.users.some(u => u.email === ADMIN_EMAIL)) return;
-  db.users.push({ id: crypto.randomUUID(), name: 'Hariharan Singaram', email: ADMIN_EMAIL, salt: '', hash: '', sv: 1, admin: true, created: new Date().toISOString() });
-  saveUsers(db);
-  console.log(`[setup] Admin account created for ${ADMIN_EMAIL}. Set its password with "Forgot password?" on the Calculators page, or run: node server.js reset-link ${ADMIN_EMAIL}`);
+  let u = db.users.find(x => x.email === ADMIN_EMAIL), changed = false;
+  if (!u) {
+    u = { id: crypto.randomUUID(), name: 'Hariharan Singaram', email: ADMIN_EMAIL, salt: '', hash: '', sv: 1, admin: true, created: new Date().toISOString() };
+    db.users.push(u); changed = true;
+    console.log(`[setup] Admin account created for ${ADMIN_EMAIL}.`);
+  }
+  if (ADMIN_PASSWORD_HASH) {
+    const [salt, hash] = ADMIN_PASSWORD_HASH.split(':');
+    if (!salt || !/^[0-9a-f]{128}$/i.test(hash || '')) console.warn('[setup] ADMIN_PASSWORD_HASH is not valid. Create it with: node server.js hash \'YourPassword\'');
+    else if (u.salt !== salt || u.hash !== hash) { u.salt = salt; u.hash = hash; u.sv = (u.sv || 1) + 1; changed = true; console.log('[setup] Admin password set from ADMIN_PASSWORD_HASH.'); }
+  } else if (ADMIN_PASSWORD) {
+    if (ADMIN_PASSWORD.length < 8) console.warn('[setup] ADMIN_PASSWORD must be at least 8 characters; ignored.');
+    else if (!(await verifyPassword(ADMIN_PASSWORD, u))) { u.salt = crypto.randomBytes(16).toString('hex'); u.hash = await hashPassword(ADMIN_PASSWORD, u.salt); u.sv = (u.sv || 1) + 1; changed = true; console.log('[setup] Admin password set from ADMIN_PASSWORD.'); }
+  } else if (!u.hash) {
+    console.log(`[setup] The admin account has no password yet. Use "Forgot password?", run: node server.js reset-link ${ADMIN_EMAIL}, or set ADMIN_PASSWORD_HASH in Coolify so it survives redeploys.`);
+  }
+  if (changed) saveUsers(db);
 }
 
 /* ---------- sessions (signed, stateless cookies) ---------- */
@@ -341,8 +360,15 @@ async function cli(args) {
     console.log(`Password link (valid ${RESET_MINUTES} minutes): ${resetLink(PUBLIC_URL || 'https://harising.cloud', issueResetToken(db, u))}`);
     return;
   }
-  console.log('Commands: users | add <email> [name] | delete <email> | reset <email> <password> | reset-link <email>');
+  if (cmd === 'hash') {
+    if (!a || a.length < 8) { console.log("Usage: node server.js hash 'YourPassword'   (8+ characters)"); return; }
+    const salt = crypto.randomBytes(16).toString('hex');
+    console.log(`${salt}:${await hashPassword(a, salt)}`);
+    console.log('Copy the line above into Coolify as ADMIN_PASSWORD_HASH, then redeploy.');
+    return;
+  }
+  console.log('Commands: users | add <email> [name] | delete <email> | reset <email> <password> | reset-link <email> | hash <password>');
 }
 
 if (process.argv.length > 2) cli(process.argv.slice(2)).catch(e => { console.error(e); process.exit(1); });
-else { ensureAdmin(); server.listen(PORT, () => console.log(`harising.cloud listening on :${PORT} (signup: ${SIGNUP}, data: ${DATA_DIR}, email: ${SMTP.user ? 'on' : 'off'})`)); }
+else ensureAdmin().then(() => server.listen(PORT, () => console.log(`harising.cloud listening on :${PORT} (signup: ${SIGNUP}, data: ${DATA_DIR}, email: ${SMTP.user ? 'on' : 'off'})`))).catch(e => { console.error(e); process.exit(1); });

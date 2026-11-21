@@ -26,6 +26,8 @@ The login only works when Coolify runs `server.js`. If the app uses the **Static
    | `SMTP_USER` | `ozharising@gmail.com` |
    | `SMTP_PASS` | A **Gmail App Password** (see below), not your normal Gmail password |
 
+   | `ADMIN_PASSWORD_HASH` | Your admin password in protected (hashed) form, so it survives every redeploy. Create it with `node server.js hash 'YourPassword'` and paste the whole line it prints. |
+
    Optional: `ADMIN_EMAIL` (default `ozharising@gmail.com`), `SIGNUP` (default `closed`), `SMTP_HOST` (default `smtp.gmail.com`), `SMTP_PORT` (default `465`), `MAIL_FROM` (default `SMTP_USER`).
 
 5. Set the **domain** to `https://harising.cloud`. The login cookie is `Secure`, so the site must use HTTPS.
@@ -38,7 +40,13 @@ The login only works when Coolify runs `server.js`. If the app uses the **Static
 2. Go to Google Account → Security → **App passwords**, create one called "harising.cloud", and copy the 16-character password.
 3. Paste it into Coolify as `SMTP_PASS` and redeploy.
 
-## Set the admin password the first time
+## Keep your password across redeploys
+
+Set `ADMIN_PASSWORD_HASH` in Coolify (see the table above). The server applies it every time it starts, so pushing from GitHub never resets your password, even if the `/data` volume is missing. To change the password later, create a new value with `node server.js hash 'NewPassword'`, replace the setting and redeploy.
+
+Also set `SESSION_SECRET` to a fixed value. If it's missing, the server makes a random one on each start and you're logged out after every deploy.
+
+## Set the admin password the first time (without ADMIN_PASSWORD_HASH)
 
 1. Open https://harising.cloud/#calculators and click **Forgot password?**
 2. Enter **ozharising@gmail.com**. A reset link arrives by email (check spam). It works once and expires after 60 minutes.
@@ -60,6 +68,7 @@ node server.js reset-link <email>             # print a one-time password link
 node server.js add <email> [name]             # add another account (prints a link to set its password)
 node server.js delete <email>                 # remove an account
 node server.js reset <email> <new-password>   # set a password directly
+node server.js hash '<password>'              # make a value for ADMIN_PASSWORD_HASH
 ```
 
 ## Security notes
