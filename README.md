@@ -3,7 +3,7 @@
 This repository is the complete website plus a small Node.js server that protects the **Calculators** page with an admin login.
 
 - The main portfolio (all animations, photos and sections) is public.
-- The calculators are only sent to a signed-in account. The calculator code lives in `private/`, and the server refuses it without a valid login.
+- The **Calculators** and **Concepts** pages are only sent to a signed-in account (same admin login for both). Their code lives in `private/` (`calculators.js`, `concepts.js`), and the server refuses it without a valid login.
 - **Sign-up is switched off.** The only account is the admin, **ozharising@gmail.com**, created automatically the first time the server starts.
 - **Forgot password?** on the login page emails a one-time reset link. It's also how you set the admin password for the first time.
 - No outside packages: only Node.js built-ins, so there is nothing to `npm install`.

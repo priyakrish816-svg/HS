@@ -324,9 +324,9 @@ const server = http.createServer(async (req, res) => {
   try {
     if (route === '/healthz') { res.writeHead(200, { 'Content-Type': 'text/plain' }); return res.end('ok'); }
     if (route.startsWith('/api/')) return await api(req, res, route);
-    if (route === '/app/calculators.js') {
+    if (route === '/app/calculators.js' || route === '/app/concepts.js') {
       if (!currentUser(req)) return json(res, 401, { error: 'Sign in required.' });
-      return sendFile(res, path.join(PRIVATE_DIR, 'calculators.js'), 'private, no-store');
+      return sendFile(res, path.join(PRIVATE_DIR, path.basename(route)), 'private, no-store');
     }
     if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }
     const rel = route === '/' ? '/index.html' : route;
