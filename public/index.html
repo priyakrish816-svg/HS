@@ -465,7 +465,7 @@ h2.rv.in{clip-path:inset(-10% -2% -10% 0)}
 
 <nav><div class="wrap">
   <a class="logo" href="#top"><i>HS</i>Hariharan Singaram</a>
-  <div class="links"><a href="#floor">On site</a><a href="#shift">Paper mill</a><a href="#smelter">Smelter</a><a href="#about">About</a><a href="#experience">Experience</a><a href="#certifications">Certifications</a><a href="#contact">Contact</a><a href="#calculators" class="ddt">Calculators</a></div>
+  <div class="links"><a href="#floor">On site</a><a href="#shift">Paper mill</a><a href="#smelter">Smelter</a><a href="#about">About</a><a href="#experience">Experience</a><a href="#certifications">Certifications</a><a href="#contact">Contact</a><a href="#calculators" class="ddt">Calculators</a><a href="#concepts" class="ddt">Concepts</a></div>
 </div><div id="prog"></div></nav>
 
 <main id="home">
@@ -1248,8 +1248,8 @@ const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 async function check(){try{const r=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});const ct=r.headers.get('content-type')||'';if(ct.includes('application/json')){const j=await r.json();st.mode='server';st.user=j.user||null;st.signup=j.signup||'open';return}}catch(e){}st.mode='preview'}
 let loading=null;
 function loadModule(){if(window.HSCalc)return Promise.resolve();if(loading)return loading;loading=new Promise((res,rej)=>{const s=document.createElement('script');s.src=st.mode==='server'?'/app/calculators.js':'calculators.js';s.onload=res;s.onerror=()=>{loading=null;rej()};document.body.appendChild(s)});return loading}
-function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
-  view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>Calculators</h1><p>Sign in to use 33 engineering calculators for vibration analysis and machinery lubrication. Results update as you type, and every calculator shows its formula.</p></div></div>
+function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';const isCo=h==='concepts';
+  view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>${isCo?'Concepts':'Calculators'}</h1><p>${isCo?'Sign in to continue.':'Sign in to use 33 engineering calculators for vibration analysis and machinery lubrication. Results update as you type, and every calculator shows its formula.'}</p></div></div>
   <div class="band"><div class="wrap auth one">
    <div class="authbox">
     ${canSign?`<div class="atabs" role="tablist"><button type="button" role="tab" data-t="login" aria-selected="${tab==='login'}">Log in</button><button type="button" role="tab" data-t="signup" aria-selected="${tab==='signup'}">Create account</button></div>`:'<h3 style="margin:0 0 16px">Log in</h3>'}
@@ -1277,7 +1277,7 @@ function gate(h,tab){tab=tab||'login';const canSign=st.signup!=='closed';
     try{const r=await fetch('/api/'+(tab==='signup'?'signup':'login'),{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));
       if(!r.ok){err.textContent=j.error||'Something went wrong. Please try again.';sub.disabled=false;sub.textContent=tab==='signup'?'Create account':'Log in';return}
       st.user=j.user;show(h)}catch(ex){err.textContent='Could not reach the server. Check your connection.';sub.disabled=false;sub.textContent=tab==='signup'?'Create account':'Log in'}});
-  document.getElementById('a-email').focus({preventScroll:true});document.title='Sign in · Calculators · Hariharan Singaram'}
+  document.getElementById('a-email').focus({preventScroll:true});document.title='Sign in · '+(isCo?'Concepts':'Calculators')+' · Hariharan Singaram'}
 function shell(title,sub,inner){view.innerHTML=`<div class="cv-head"><div class="wrap"><h1>${title}</h1><p>${sub}</p></div></div><div class="band"><div class="wrap auth one"><div class="authbox">${inner}</div></div></div>`}
 function forgot(h){shell('Forgot password','Enter your account email and we\'ll send you a link to set a new password.',`<form id="ff" novalidate><div class="cfield"><label for="f-email">Email</label><input id="f-email" type="email" autocomplete="email" required maxlength="160"></div><p class="aerr" id="ferr" role="alert"></p><p class="aok" id="fok" role="status"></p><button class="btn solid" type="submit" id="fsub">Send reset link</button><p class="afl"><a href="#" id="fback">Back to log in</a></p></form>`);
   document.getElementById('fback').addEventListener('click',e=>{e.preventDefault();gate(h)});
@@ -1306,12 +1306,16 @@ function resetView(token){
 function bar(){const head=view.querySelector('.cv-head .wrap');if(!head)return;const d=document.createElement('div');d.className='acct';
   d.innerHTML=st.mode==='preview'?'<span>Preview mode: on harising.cloud visitors sign in first.</span>':`<span>Signed in as <b>${esc(st.user.name||st.user.email)}</b></span><button type="button" class="btn" id="alog">Log out</button>`;head.prepend(d);
   const lo=document.getElementById('alog');if(lo)lo.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:'{}'})}catch(e){}st.user=null;gate(location.hash.slice(1))})}
+let coLoading=null;
+function loadConcepts(){if(window.HSConcepts)return Promise.resolve();if(coLoading)return coLoading;coLoading=new Promise((res,rej)=>{const s=document.createElement('script');s.src=st.mode==='server'?'/app/concepts.js':'concepts.js';s.onload=res;s.onerror=()=>{coLoading=null;rej()};document.body.appendChild(s)});return coLoading}
 async function show(h){if(st.mode===null){view.innerHTML='<div class="band"><div class="wrap"><p class="cnote">Loading…</p></div></div>';await check()}
   if(h.startsWith('reset-'))return resetView(h.slice(6));
   if(st.mode==='server'&&!st.user)return gate(h);
+  if(h==='concepts'){try{await loadConcepts()}catch(e){view.innerHTML='<div class="band"><div class="wrap"><p class="aerr">Concepts could not load. Refresh the page to try again.</p></div></div>';return}
+    window.HSConcepts.show(view);bar();return}
   try{await loadModule()}catch(e){view.innerHTML='<div class="band"><div class="wrap"><p class="aerr">The calculators could not load. Refresh the page to try again.</p></div></div>';return}
   window.HSCalc.show(h);bar()}
-function route(){const h=decodeURIComponent(location.hash.slice(1)),isC=h==='calculators'||h==='calc-vib'||h==='calc-lube'||h.startsWith('c-')||h.startsWith('reset-');
+function route(){const h=decodeURIComponent(location.hash.slice(1)),isC=h==='calculators'||h==='concepts'||h==='calc-vib'||h==='calc-lube'||h.startsWith('c-')||h.startsWith('reset-');
   home.hidden=isC;view.hidden=!isC;
   if(isC){show(h);scrollTo({top:0,behavior:'instant'});document.activeElement?.blur()}
   else{document.title='Hariharan Singaram';if(h){const el=document.getElementById(h);if(el)requestAnimationFrame(()=>el.scrollIntoView())}}}
